@@ -1,0 +1,3285 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>KOMMUNIKATIVE! — Ausstellung 2026</title>
+  <meta name="description" content="KOMMUNIKATIVE! — Ausstellung zu Gestaltung, Bildung, Stadt und Gesellschaft. 20. Oktober bis 7. November 2026 im INTeF Darmstadt.">
+  <link rel="icon" type="image/png" href="icon/favicon.png">
+  <!-- Alte Haas Grotesk -->
+  <link href="https://fonts.cdnfonts.com/css/alte-haas-grotesk" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #000000;
+      --muted: #555555;
+      --tile-bg: #f4f4f4;
+      --tile-bg-alt: #efefef;
+      
+      /* Dynamische Abstände & Größen für Mobile, Tablet & Desktop */
+      --page-pad: clamp(14px, 2.5vw, 28px);
+      --header-h: clamp(44px, 5vw, 52px);
+      --section-space: clamp(48px, 7vw, 96px);
+      --grid-gap: clamp(3px, 0.4vw, 6px);
+      
+      --font-main: 'Alte Haas Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--bg);
+      color: var(--fg);
+      font-size: clamp(11.5px, 0.9vw, 13px);
+      line-height: 1.45;
+      overflow-x: hidden;
+    }
+
+    .cursor-color-trail {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--trail-size);
+      height: var(--trail-size);
+      background: var(--trail-color);
+      clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate3d(-50%, -50%, 0);
+      animation: cursorColorTrail var(--trail-duration, 650ms) ease-out forwards;
+      will-change: opacity, transform;
+    }
+
+    @keyframes cursorColorTrail {
+      to {
+        opacity: 0;
+        transform: translate3d(
+          calc(-50% + var(--trail-drift-x, 0px)),
+          calc(-50% + var(--trail-drift-y, 0px)),
+          0
+        ) rotate(var(--trail-rotation, 0deg)) scale(0.25);
+      }
+    }
+
+    button, input {
+      font-family: var(--font-main);
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* =========================================================
+       1. TOP BAR NAVIGATION & UTILITY BAR (RESPONSIV)
+       ========================================================= */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-h);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--page-pad);
+      gap: 10px;
+    }
+
+    .nav-left-wrap {
+      display: flex;
+      align-items: center;
+      gap: clamp(8px, 1.8vw, 24px);
+      min-width: 0;
+      flex: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: clamp(8px, 1.8vw, 24px);
+      align-items: center;
+      white-space: nowrap;
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-links::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-links button {
+      font-size: clamp(10.5px, 0.88vw, 12px);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      color: var(--fg);
+      padding: 6px 0;
+      transition: opacity 0.2s;
+      flex-shrink: 0;
+    }
+
+    .nav-links button:hover {
+      opacity: 0.5;
+    }
+
+    .nav-links button.active {
+      font-weight: 700;
+    }
+
+    /* Header Brand Slot (Das kleine Logo beim Scrollen) */
+    .header-brand-slot {
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      max-width: 0;
+      margin-right: 0;
+      transform: scale(0.7) translateX(-10px);
+      pointer-events: none;
+      overflow: hidden;
+      transition: 
+        opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+        margin-right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
+    }
+
+    body.logo-scrolled .header-brand-slot {
+      opacity: 1;
+      max-width: 44px;
+      margin-right: clamp(6px, 1.2vw, 14px);
+      transform: scale(1) translateX(0);
+      pointer-events: auto;
+    }
+
+    .header-small-logo-btn {
+      display: flex;
+      align-items: center;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .header-small-logo-btn:hover {
+      opacity: 0.72;
+      transform: scale(1.06);
+    }
+
+    .header-small-signet {
+      height: clamp(17px, 2vw, 23px);
+      width: auto;
+      display: block;
+    }
+
+    .top-utilities {
+      display: flex;
+      align-items: center;
+      gap: clamp(10px, 1.6vw, 24px);
+      flex-shrink: 0;
+    }
+
+    /* =========================================================
+       SUCHFELD & DYNAMISCHES SUCH-ICON FÜR MOBIL / SKALIERUNG
+       ========================================================= */
+    .site-search {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid var(--fg);
+      width: clamp(120px, 14vw, 190px);
+      padding-bottom: 3px;
+      transition: width 0.25s ease, border-color 0.2s ease;
+      position: relative;
+    }
+
+    .search-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      background: none;
+      border: none;
+      color: var(--fg);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .search-toggle-btn:hover {
+      opacity: 0.6;
+    }
+
+    .search-toggle-btn svg {
+      width: 14px;
+      height: 14px;
+      display: block;
+    }
+
+    .search-field-inner {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      min-width: 0;
+      gap: 4px;
+    }
+
+    .search-field-inner input {
+      width: 100%;
+      font-size: 11px;
+      outline: none;
+      border: none;
+      background: transparent;
+      color: var(--fg);
+      cursor: text;
+    }
+
+    .search-field-inner input::placeholder {
+      color: var(--fg);
+      opacity: 0.85;
+    }
+
+    .search-clear-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: color 0.15s ease;
+    }
+
+    .search-clear-btn:hover {
+      color: var(--fg);
+    }
+
+    .search-mobile-close-btn {
+      display: none !important;
+    }
+
+    /* Generic style Suchergebnis Empty-State & Suggestions */
+    .search-empty-state {
+      padding: clamp(36px, 6vw, 68px) 20px;
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .search-empty-title {
+      font-size: clamp(17px, 2vw, 24px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .search-empty-text {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0;
+    }
+    .search-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .search-suggestion-chip {
+      background: #f4f4f4;
+      border: 1px solid #e0e0e0;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 11.5px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--fg);
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .search-suggestion-chip:hover {
+      background: #111111;
+      color: #ffffff;
+      border-color: #111111;
+    }
+    .search-reset-btn {
+      margin-top: 10px;
+      background: transparent;
+      border: 1px solid #111111;
+      padding: 8px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .search-reset-btn:hover {
+      background: #111111;
+      color: #ffffff;
+    }
+
+    .utility-icons {
+      display: flex;
+      gap: 14px;
+      font-size: 11px;
+      align-items: center;
+    }
+
+    .utility-icons a,
+    .utility-icons span {
+      cursor: pointer;
+      transition: opacity 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .utility-icons a:hover,
+    .utility-icons span:hover {
+      opacity: 0.5;
+    }
+
+    /* =========================================================
+       2. WECHSELNDES KOMMUNIKATIVE!-LOGO & DYNAMISCHES HERO
+       ========================================================= */
+    .main-wrapper {
+      padding-top: var(--header-h);
+    }
+
+    #page-home.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #page-home .home-hero-section {
+      display: contents;
+    }
+
+    .view-page {
+      display: none;
+    }
+
+    .view-page.active {
+      display: block;
+      animation: fade 0.3s ease;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .home-hero-section {
+      padding: clamp(6px, 1vw, 12px) var(--page-pad) 0 var(--page-pad);
+      position: relative;
+    }
+
+    .giant-wordmark-wrap {
+      position: sticky;
+      top: var(--header-h);
+      z-index: 40;
+      margin-bottom: clamp(-10px, -1.8vw, -26px);
+      padding: clamp(6px, 1vw, 12px) var(--page-pad) 0;
+      display: flex;
+      align-items: flex-start;
+      transition: 
+        opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-origin: left top;
+    }
+
+    body.logo-scrolled .giant-wordmark-wrap {
+      opacity: 0;
+      transform: scale(0.7) translateY(-26px);
+      pointer-events: none;
+    }
+
+    .hero-logo-clickable {
+      cursor: pointer;
+      display: inline-block;
+      width: clamp(260px, 68vw, 880px);
+      transition: opacity 0.2s ease;
+    }
+
+    .hero-logo-clickable img,
+    .hero-logo-clickable svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .poster-variants-section {
+      order: 3;
+      padding: 0 var(--page-pad);
+      margin-bottom: var(--section-space);
+    }
+
+    .poster-variants-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 12px;
+      margin-bottom: clamp(10px, 1.6vw, 20px);
+      border-bottom: 1px solid #e6e6e6;
+    }
+
+    .poster-variants-heading h2 {
+      font-size: clamp(13px, 1.1vw, 15px);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .poster-variants-heading span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .poster-variants-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(6px, 0.8vw, 12px);
+    }
+
+    .poster-variant {
+      margin: 0;
+      overflow: hidden;
+      background: #f4f4f4;
+    }
+
+    .poster-variant img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 768 / 1084;
+      object-fit: cover;
+    }
+
+    /* =========================================================
+       3. EDITORIAL CAMPAIGN BLOCK & 3ER-BILDBAND
+       ========================================================= */
+    .campaign-intro-block {
+      order: 1;
+      padding: clamp(28px, 5vw, 64px) var(--page-pad) clamp(24px, 3vw, 40px);
+      max-width: 1120px;
+    }
+
+    .campaign-title {
+      max-width: 16ch;
+      font-size: clamp(30px, 5.4vw, 68px);
+      font-weight: 700;
+      line-height: 0.98;
+      margin-bottom: 20px;
+      letter-spacing: -0.04em;
+    }
+
+    .campaign-copy {
+      max-width: 76ch;
+      font-size: clamp(14px, 1.3vw, 17px);
+      line-height: 1.6;
+      color: var(--fg);
+      margin-bottom: 24px;
+    }
+
+    .campaign-kicker {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .exhibition-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+      margin: 20px 0 24px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .initiators-section {
+      order: 7;
+      padding: 10px var(--page-pad) clamp(24px, 4vw, 44px);
+    }
+
+    .initiators-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .initiators-heading h2 {
+      font-size: clamp(18px, 2vw, 24px);
+      letter-spacing: -0.02em;
+    }
+
+    .initiators-heading p {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .initiators-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid #d9d9d9;
+      border-bottom: 1px solid #d9d9d9;
+    }
+
+    .initiator-card {
+      padding: 16px 12px 16px 0;
+    }
+
+    .initiator-card + .initiator-card {
+      border-left: 1px solid #d9d9d9;
+      padding-left: 16px;
+    }
+
+    .initiator-card h3 {
+      font-size: clamp(15px, 1.4vw, 19px);
+      font-weight: 500;
+    }
+
+    .initiator-card p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .home-exhibition-preview {
+      order: 5;
+    }
+
+    #page-home > .triptych-strip {
+      order: 4;
+    }
+
+    #page-home > .home-exhibition-preview {
+      order: 5;
+    }
+
+    #page-home > .editorial-reading-section {
+      order: 6;
+    }
+
+    .home-arrow-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .home-arrow-link {
+      font-size: clamp(11px, 0.9vw, 12px);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      width: fit-content;
+      padding: 2px 0;
+      transition: opacity 0.2s;
+    }
+
+    .home-arrow-link:hover {
+      opacity: 0.55;
+    }
+
+    .home-arrow-link::before {
+      content: '▸';
+      font-size: 9px;
+    }
+
+    /* Randloses 3-Spalten-Triptychon */
+    .triptych-strip {
+      padding: 0 var(--page-pad);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(6px, 0.8vw, 12px);
+      margin-bottom: var(--section-space);
+    }
+
+    .triptych-panel {
+      aspect-ratio: 1 / 1.05;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: clamp(20px, 2.8vw, 36px);
+      border-top: 4px solid var(--theme-accent);
+      background: #f5f5f5;
+      color: #111111;
+      transition: background-color 0.2s ease;
+    }
+
+    .triptych-panel:nth-child(1) {
+      --theme-accent: #ea65a7;
+    }
+    .triptych-panel:nth-child(2) {
+      --theme-accent: #94daca;
+    }
+    .triptych-panel:nth-child(3) {
+      --theme-accent: #eb2933;
+    }
+
+    .triptych-panel:hover {
+      background: #eeeeee;
+    }
+
+    .triptych-panel-inner {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .triptych-panel:hover .triptych-panel-inner {
+      transform: scale(1.02);
+    }
+
+    .triptych-kicker {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.8;
+    }
+
+    .triptych-headline {
+      font-size: clamp(20px, 2.2vw, 34px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .triptych-sub {
+      font-size: clamp(11px, 0.9vw, 12px);
+      line-height: 1.48;
+      max-width: 36ch;
+    }
+
+    /* =========================================================
+       4. ASYMMETRISCHES SHOWCASE-GRID (FLUID DESKTOP / TABLET / MOBILE)
+       ========================================================= */
+    .section-header-row {
+      padding: 0 var(--page-pad);
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-header-title {
+      font-size: clamp(13px, 1.1vw, 15px);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .section-header-links {
+      display: flex;
+      gap: clamp(12px, 1.5vw, 20px);
+      overflow-x: auto;
+      scrollbar-width: none;
+      max-width: 100%;
+      padding-bottom: 4px;
+    }
+    .section-header-links::-webkit-scrollbar {
+      display: none;
+    }
+
+    .section-action-btn {
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      padding: 4px 0;
+      transition: opacity 0.2s;
+    }
+
+    .section-action-btn::before {
+      content: '▸';
+      font-size: 8px;
+    }
+
+    .section-action-btn.active {
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .asymmetric-showcase-block {
+      padding: 0 var(--page-pad);
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      gap: var(--grid-gap);
+      margin-bottom: var(--section-space);
+      align-items: start;
+    }
+
+    .asymmetric-showcase-block.feature-on-right {
+      grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+    }
+
+    .asymmetric-showcase-block.feature-on-right .feature-tall-Wrap {
+      grid-column: 5 / 6;
+      grid-row: 1;
+    }
+
+    .feature-tall-Wrap {
+      grid-column: 1 / 2;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .feature-tall-card {
+      background: var(--tile-bg);
+      aspect-ratio: 3 / 4.2;
+      padding: clamp(20px, 2.6vw, 36px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s;
+    }
+
+    .feature-tall-card.has-image,
+    .small-tile-card.has-image {
+      background: #333;
+    }
+
+    .tile-background-image {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .feature-tall-card.has-image::after,
+    .small-tile-card.has-image::after {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.3), transparent 22%, transparent 72%, rgba(0, 0, 0, 0.35));
+      content: "";
+      pointer-events: none;
+    }
+
+    .tile-index,
+    .tile-action {
+      position: relative;
+      z-index: 1;
+    }
+
+    .tile-index {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .has-image .tile-index,
+    .has-image .tile-action {
+      color: #fff !important;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
+    }
+
+    .tile-action {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .feature-tall-Wrap:hover .feature-tall-card {
+      background: #ececec;
+    }
+
+    .small-tile-wrap {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .small-tile-card {
+      background: var(--tile-bg);
+      aspect-ratio: 1 / 1.12;
+      padding: clamp(14px, 1.6vw, 22px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s;
+    }
+
+    .small-tile-wrap:nth-child(even) .small-tile-card {
+      background: var(--tile-bg-alt);
+    }
+
+    .small-tile-wrap:hover .small-tile-card {
+      background: #e6e6e6;
+    }
+
+    .object-specimen {
+      position: relative;
+      z-index: 1;
+      margin: auto;
+      width: 74%;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: clamp(12px, 1.4vw, 18px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.06);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    .feature-tall-Wrap:hover .object-specimen,
+    .small-tile-wrap:hover .object-specimen {
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    .tile-caption {
+      padding-top: 8px;
+      font-size: clamp(10.5px, 0.85vw, 11.5px);
+      color: var(--fg);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .tile-caption-muted {
+      color: var(--muted);
+      font-size: clamp(10px, 0.8vw, 10.5px);
+      margin-top: 2px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* =========================================================
+       5. KURATORISCHER LANGTEXT & PROGRAMM
+       ========================================================= */
+    .editorial-reading-section {
+      padding: clamp(32px, 5vw, 56px) var(--page-pad) var(--section-space) var(--page-pad);
+      display: grid;
+      grid-template-columns: 2fr 4fr 4fr 2fr;
+      gap: clamp(20px, 3vw, 36px);
+    }
+
+    .editorial-reading-section h2 {
+      font-size: clamp(13px, 1.1vw, 15px);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .editorial-reading-section p {
+      font-size: clamp(12px, 0.95vw, 13px);
+      line-height: 1.65;
+      color: #111;
+      margin-bottom: 16px;
+    }
+
+    .program-container {
+      padding: clamp(24px, 4vw, 44px) var(--page-pad) var(--section-space) var(--page-pad);
+      display: grid;
+      grid-template-columns: 3.5fr 8.5fr;
+      gap: clamp(28px, 4vw, 56px);
+    }
+
+    .program-sticky-info {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+      align-self: start;
+    }
+
+    .program-sticky-info h1 {
+      font-size: clamp(24px, 2.8vw, 34px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .info-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .info-group-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .info-group-val {
+      font-size: clamp(12px, 0.95vw, 13px);
+      line-height: 1.5;
+    }
+
+    .program-rows {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(28px, 3.5vw, 44px);
+    }
+
+    .program-entry {
+      display: grid;
+      grid-template-columns: 200px 1fr 130px;
+      gap: clamp(12px, 2vw, 24px);
+      padding-bottom: clamp(24px, 3vw, 36px);
+      border-bottom: 1px solid #eeeeee;
+      align-items: baseline;
+    }
+
+    .program-entry-date {
+      font-size: clamp(11.5px, 0.95vw, 12.5px);
+      font-weight: 700;
+    }
+
+    .program-entry-title {
+      font-size: clamp(16px, 1.5vw, 20px);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      margin-bottom: 8px;
+    }
+
+    .program-entry-speakers {
+      font-size: clamp(12px, 0.95vw, 13px);
+      line-height: 1.6;
+      color: #222;
+    }
+
+    .program-entry-type {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    /* =========================================================
+       6. EXHIBIT SLIDE-OVER DETAIL PANEL (TOUCH & SWIPE OPTIMIZED)
+       ========================================================= */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      touch-action: none;
+      z-index: 200;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+    }
+
+    .drawer-overlay.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity 0.3s ease, visibility 0s;
+    }
+
+    .exhibit-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(560px, 100vw);
+      background: var(--bg);
+      box-shadow: -20px 0 60px rgba(0, 0, 0, 0.08);
+      z-index: 210;
+      transform: translateX(100%);
+      visibility: hidden;
+      pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.4s;
+      display: flex;
+      flex-direction: column;
+      padding: clamp(8px, 1.5vw, 16px) clamp(20px, 3.5vw, 40px);
+      overflow: hidden;
+      overscroll-behavior: contain;
+    }
+
+    .exhibit-drawer.open {
+      transform: translateX(0);
+      visibility: visible;
+      pointer-events: auto;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s;
+    }
+
+    .drawer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 10.5px;
+      background: var(--bg);
+      padding: 2px 0;
+      flex: 0 0 auto;
+    }
+
+    .drawer-scroll-content {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding-bottom: 8px;
+    }
+
+    .drawer-artwork-stage {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: var(--tile-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      padding: clamp(18px, 3vw, 32px);
+      flex-shrink: 0;
+    }
+
+    .drawer-artwork-stage.has-images {
+      display: block;
+      aspect-ratio: auto;
+      padding: 0;
+      background: transparent;
+    }
+
+    .drawer-artwork-stage.has-images .drawer-specimen-box {
+      display: none;
+    }
+
+    .drawer-image-gallery {
+      width: 100%;
+    }
+
+    .drawer-image-gallery[hidden] {
+      display: none;
+    }
+
+    .drawer-image-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      background: #f4f4f4;
+      touch-action: pan-y;
+    }
+
+    .drawer-image-frame > img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .drawer-image-frame > img.is-landscape {
+      object-fit: cover;
+    }
+
+    .drawer-gallery-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .drawer-gallery-thumbnails {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 2px 0 8px;
+    }
+
+    .drawer-gallery-thumbnails[hidden] {
+      display: none;
+    }
+
+    .drawer-gallery-thumbnails:empty {
+      display: none;
+    }
+
+    .drawer-gallery-thumbnail {
+      flex: 0 0 56px;
+      height: 44px;
+      padding: 2px;
+      border: 1px solid #dedede;
+      opacity: 0.65;
+    }
+
+    .drawer-gallery-thumbnail[aria-current="true"] {
+      border-color: #111;
+      opacity: 1;
+    }
+
+    .drawer-gallery-thumbnail img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .drawer-specimen-box {
+      width: clamp(68%, 72%, 82%);
+      height: 86%;
+      padding: clamp(16px, 2.2vw, 24px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.08);
+    }
+
+    .drawer-exhibit-title {
+      font-size: clamp(20px, 2.2vw, 24px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .drawer-exhibit-authors {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .drawer-exhibit-body {
+      font-size: clamp(12.5px, 1vw, 13.5px);
+      line-height: 1.7;
+      color: #111;
+      white-space: pre-line;
+      flex-shrink: 0;
+      margin-bottom: 8px;
+    }
+
+    .drawer-nav-bottom {
+      flex: 0 0 auto;
+      margin-top: 0;
+      padding: 10px 0 2px;
+      border-top: 1px solid #efefef;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: var(--bg);
+    }
+
+    .drawer-nav-bottom button {
+      padding: 8px 0;
+    }
+
+    /* =========================================================
+       7. FOOTER, SOCIAL MEDIA LEISTE & PARTNER-LOGOS
+       ========================================================= */
+    footer {
+      padding: clamp(44px, 6vw, 72px) var(--page-pad) clamp(32px, 4vw, 48px) var(--page-pad);
+      margin-top: var(--section-space);
+      background: #fafafa;
+    }
+
+    .footer-columns {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(20px, 3vw, 36px);
+      margin-bottom: clamp(36px, 5vw, 56px);
+      font-size: clamp(11px, 0.9vw, 12px);
+      line-height: 1.6;
+    }
+
+    .footer-col-title {
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    /* GENERIC STYLE SOCIAL MEDIA LEISTE (SCHMAL) */
+    .social-media-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 9px 0;
+      border-top: 1px solid #e6e6e6;
+    }
+
+    .social-links-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: clamp(16px, 2.5vw, 32px);
+    }
+
+    .social-link-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: clamp(11.5px, 0.95vw, 12.5px);
+      font-weight: 400;
+      padding: 4px 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .social-link-item:hover {
+      opacity: 0.5;
+    }
+
+    .social-link-item svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .social-link-item .ext-arrow {
+      font-size: 9px;
+      opacity: 0.65;
+    }
+
+    /* Partner-Logoleiste unten — Garantiert immer in einer einzigen Leiste skaliert */
+    .partner-logo-bar {
+      display: flex;
+      flex-wrap: nowrap !important;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(6px, 2.2vw, 42px);
+      width: 100%;
+      padding-top: clamp(20px, 3.5vw, 36px);
+      margin-top: clamp(24px, 4vw, 40px);
+      border-top: 1px solid #e6e6e6;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .partner-logo-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 1 auto;
+      min-width: 0;
+      text-decoration: none;
+      color: inherit;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .partner-logo-item:hover {
+      opacity: 0.72;
+      transform: translateY(-1px);
+    }
+
+    .partner-logo-item img {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      flex-shrink: 1;
+    }
+
+    /* Harmonisch proportionierte Logo-Höhen für einzeiligen Flow */
+    .logo-wdc img   { height: clamp(10px, 2.1vw, 28px); max-height: 28px; }
+    .logo-intef img { height: clamp(8px, 1.6vw, 21px);  max-height: 21px; }
+    .logo-ko img    { height: clamp(9px, 1.8vw, 23px);  max-height: 23px; }
+    .logo-boell img { height: clamp(9px, 1.8vw, 24px);  max-height: 24px; }
+    .logo-hda img   { height: clamp(13px, 2.6vw, 35px); max-height: 35px; }
+
+    /* =========================================================
+       8. TABLET & MOBILE BREAKPOINTS (OPTIMIERTE RASTER)
+       ========================================================= */
+    /* Tablet Landscape & Portrait (bis 1080px) */
+    @media (max-width: 1080px) {
+
+
+      /* Auf dem Tablet wird das 1+4 Grid zu 1 großes Feature links + 2x2 Grid rechts */
+      .asymmetric-showcase-block {
+        grid-template-columns: 1.3fr 1fr 1fr;
+        gap: 8px;
+      }
+
+      .feature-tall-Wrap {
+        grid-column: 1 / 2;
+        grid-row: 1 / 3;
+      }
+
+      .asymmetric-showcase-block.feature-on-right {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .asymmetric-showcase-block.feature-on-right .feature-tall-Wrap {
+        grid-column: 1 / -1;
+        grid-row: auto;
+      }
+
+      .feature-tall-card {
+        aspect-ratio: 3 / 4.4;
+        height: 100%;
+      }
+
+      .editorial-reading-section {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .program-container {
+        grid-template-columns: 1fr;
+      }
+
+      .program-sticky-info {
+        position: static;
+      }
+
+      .info-cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+        background: var(--tile-bg);
+        padding: 20px;
+      }
+
+      .footer-columns {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Tablet Portrait & großes Smartphone (bis 820px) */
+    @media (max-width: 820px) {
+      .utility-icons {
+        display: none;
+      }
+
+      .poster-variants-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .initiators-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .triptych-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .triptych-panel {
+        aspect-ratio: 16 / 9;
+      }
+
+      /* Auf schmaleren Tablets/Phones: 1 großes Feature oben (volle Breite) + 2x2 Grid darunter */
+      .asymmetric-showcase-block {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px 8px;
+      }
+
+      .feature-tall-Wrap {
+        grid-column: 1 / -1;
+        grid-row: auto;
+      }
+
+      .feature-tall-card {
+        aspect-ratio: 4 / 3.4;
+      }
+
+      .program-entry {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .program-entry-type {
+        text-align: left;
+        margin-top: 4px;
+      }
+
+      .info-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Breakpoint für Mobil & schmale Skalierung: Suchfeld wird zum Icon */
+    @media (max-width: 768px) {
+      .utility-icons {
+        display: none;
+      }
+
+      /* Suchfeld kollabiert zum kompakten Icon-Button */
+      .site-search {
+        border-bottom: none;
+        width: auto;
+        padding-bottom: 0;
+      }
+
+      .site-search .search-field-inner {
+        display: none;
+      }
+
+      .search-toggle-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 4px;
+      }
+
+      .search-toggle-btn svg {
+        width: 17px;
+        height: 17px;
+      }
+
+      /* Aktiver Vollbild- / Header-Suchmodus auf Mobilgeräten */
+      .top-bar.search-active .site-search {
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        z-index: 120;
+        display: flex;
+        align-items: center;
+        padding: 0 var(--page-pad);
+        gap: 10px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        animation: searchBarSlideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .top-bar.search-active .search-toggle-btn {
+        opacity: 0.45;
+        pointer-events: none;
+      }
+
+      .top-bar.search-active .search-field-inner {
+        display: flex;
+        flex: 1;
+        min-width: 0;
+        align-items: center;
+        border-bottom: 1px solid #000000;
+        padding-bottom: 3px;
+      }
+
+      .top-bar.search-active .search-field-inner input {
+        font-size: 13px;
+        width: 100%;
+      }
+
+      .top-bar.search-active .search-mobile-close-btn {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--muted);
+        padding: 6px 4px;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: color 0.15s ease;
+      }
+
+      .top-bar.search-active .search-mobile-close-btn:hover {
+        color: var(--fg);
+      }
+    }
+
+    @keyframes searchBarSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Smartphone (bis 560px) */
+    @media (max-width: 560px) {
+      .nav-left-wrap {
+        gap: clamp(6px, 1.5vw, 12px);
+      }
+
+      .nav-links {
+        gap: clamp(6px, 1.8vw, 14px);
+      }
+
+      .nav-links button {
+        font-size: clamp(10px, 2.7vw, 11.5px);
+        padding: 4px 0;
+      }
+
+      body.logo-scrolled .header-brand-slot {
+        max-width: 28px;
+        margin-right: 6px;
+      }
+
+      .header-small-signet {
+        height: 17px;
+      }
+
+      .hero-logo-clickable {
+        width: 92vw;
+      }
+
+      .initiators-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .initiator-card {
+        padding: 12px 0;
+      }
+
+      .initiator-card + .initiator-card {
+        border-left: 0;
+        border-top: 1px solid #d9d9d9;
+        padding-left: 0;
+      }
+
+      .triptych-panel {
+        aspect-ratio: 4 / 3.2;
+      }
+
+      .editorial-reading-section,
+      .info-cards-grid,
+      .footer-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .social-media-bar {
+        justify-content: flex-start;
+        padding: 8px 0;
+      }
+
+      .social-links-row {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px 20px;
+      }
+
+      /* Partner-Logos bleiben ausnahmslos in einer einzigen Zeile */
+      .partner-logo-bar {
+        flex-wrap: nowrap !important;
+        justify-content: space-between;
+        gap: clamp(4px, 1.8vw, 12px);
+      }
+    }
+
+    /* Sehr schmale Bildschirme (bis 400px) */
+    @media (max-width: 400px) {
+      .nav-extra-word {
+        display: none;
+      }
+      .nav-links {
+        gap: 7px;
+      }
+      .partner-logo-bar {
+        gap: 4px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .logo-wdc img   { height: clamp(13px, 4vw, 18px); max-height: 18px; }
+      .logo-intef img { height: clamp(12px, 3.8vw, 17px); max-height: 17px; }
+      .logo-ko img    { height: clamp(13px, 4vw, 18px); max-height: 18px; }
+      .logo-boell img { height: clamp(12px, 3.8vw, 17px); max-height: 17px; }
+      .logo-hda img   { height: clamp(16px, 5.3vw, 22px); max-height: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       1. TOP BAR (VOLLSTÄNDIGE NAVIGATION OBEN IN EINER LEISTE)
+       ========================================================= -->
+  <header class="top-bar" id="main-top-bar">
+    <div class="nav-left-wrap">
+      <!-- Dynamisches Klein-Logo im Header: animiert sich beim Scrollen ein -->
+      <div class="header-brand-slot" id="header-brand-slot">
+        <button 
+          class="header-small-logo-btn" 
+          onclick="handleHeaderLogoClick()" 
+          title="KOMMUNIKATIVE! (Klicken für Farbwechsel / Startseite)"
+        >
+          <img 
+            id="header-small-logo" 
+            src="IMG/Logos/Kommunikative klein 1.svg" 
+            alt="KOMMUNIKATIVE!" 
+            class="header-small-signet"
+          >
+        </button>
+      </div>
+
+      <nav class="nav-links" aria-label="Hauptnavigation">
+        <button id="nav-home" class="active" onclick="showPage('home')">Ausstellung</button>
+        <button id="nav-ausstellung" onclick="showPage('ausstellung')">Arbeiten</button>
+        <button id="nav-programm" onclick="showPage('programm')"><span>Programm</span><span class="nav-extra-word"> &amp; Besuch</span></button>
+        <button id="nav-about" onclick="scrollToEditorial()">Konzept</button>
+      </nav>
+    </div>
+
+    <div class="top-utilities">
+      <div class="site-search" id="site-search">
+        <button 
+          type="button"
+          class="search-toggle-btn" 
+          id="search-toggle-btn" 
+          onclick="handleSearchClick()" 
+          aria-label="Suche öffnen" 
+          title="Suche"
+        >
+          <svg class="search-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7.5"></circle>
+            <line x1="16.5" y1="16.5" x2="22" y2="22"></line>
+          </svg>
+        </button>
+
+        <div class="search-field-inner" id="search-field-inner">
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Suche" 
+            autocomplete="off" 
+            oninput="handleSearch(this.value)"
+          >
+          <button 
+            type="button"
+            class="search-clear-btn" 
+            id="search-clear-btn" 
+            onclick="clearSearch()" 
+            aria-label="Eingabe löschen" 
+            title="Löschen" 
+            style="display:none;"
+          >
+            <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <button 
+          type="button"
+          class="search-mobile-close-btn" 
+          id="search-mobile-close-btn" 
+          onclick="closeSearchMobile()" 
+          aria-label="Suche schließen" 
+          title="Schließen"
+        >
+          <span>Schließen</span>
+          <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="utility-icons" title="Aktuelle Ausstellung &amp; Ort">
+        <span onclick="showPage('programm')">20.10.–07.11.26</span>
+        <span onclick="showPage('programm')">Darmstadt</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-wrapper">
+
+    <!-- =========================================================
+         SEITE 1: HOME
+         ========================================================= -->
+    <main id="page-home" class="view-page active">
+
+      <section class="home-hero-section">
+        <div class="giant-wordmark-wrap">
+          <div class="hero-logo-clickable" onclick="cycleHeroLogo()" title="KOMMUNIKATIVE! (Klicken für Farbwechsel)">
+            <img 
+              id="dynamic-kom-logo" 
+              src="IMG/Logos/Kommunikative Logo 1.svg" 
+              alt="KOMMUNIKATIVE!"
+              onerror="this.style.display='none'; document.getElementById('inline-kom-fallback').style.display='block';"
+            >
+            <!-- Vektor-Fallback falls lokale SVG-Dateien in anderem Pfad liegen -->
+            <svg id="inline-kom-fallback" style="display:none;" viewBox="0 0 1180 125" xmlns="http://www.w3.org/2000/svg" aria-label="KOMMUNIKATIVE!">
+              <text x="0" y="108" font-family="'Alte Haas Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="700" font-size="122" fill="#111111">K</text>
+              <g transform="translate(80, 4)">
+                <circle id="fallback-o-circle" cx="58" cy="58" r="56" fill="#df99d4"/>
+                <g fill="#000000" transform="translate(58,58)">
+                  <circle cx="0" cy="-22" r="22" fill="none" stroke="#000" stroke-width="5" stroke-dasharray="14 8"/>
+                  <circle cx="0" cy="-32" r="6"/>
+                  <circle cx="30" cy="-10" r="6"/>
+                  <circle cx="19" cy="26" r="6"/>
+                  <circle cx="-19" cy="26" r="6"/>
+                  <circle cx="-30" cy="-10" r="6"/>
+                  <path d="M-8,-22 Q0,-12 8,-22 M20,-14 Q14,0 24,10 M14,20 Q0,14 -14,20 M-24,10 Q-14,0 -20,-14" stroke="#000" stroke-width="6" fill="none" stroke-linecap="round"/>
+                </g>
+              </g>
+              <text x="202" y="108" font-family="'Alte Haas Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="700" font-size="122" letter-spacing="-2" fill="#111111">MMUNIKATIVE!</text>
+            </svg>
+          </div>
+        </div>
+
+        <section class="poster-variants-section" aria-labelledby="poster-variants-title">
+          <div class="poster-variants-heading">
+            <h2 id="poster-variants-title">Die Ausstellung in vier Plakatvarianten</h2>
+            <span>20.10.–07.11.2026 · Darmstadt</span>
+          </div>
+          <div class="poster-variants-grid">
+            <figure class="poster-variant">
+              <img src="IMG/Poster/ausstellung-01.png" alt="Ausstellungsplakat der KOMMUNIKATIVE!, Farbvariante 1" loading="lazy" decoding="async">
+            </figure>
+            <figure class="poster-variant">
+              <img src="IMG/Poster/ausstellung-02.png" alt="Ausstellungsplakat der KOMMUNIKATIVE!, Farbvariante 2" loading="lazy" decoding="async">
+            </figure>
+            <figure class="poster-variant">
+              <img src="IMG/Poster/ausstellung-03.png" alt="Ausstellungsplakat der KOMMUNIKATIVE!, Farbvariante 3" loading="lazy" decoding="async">
+            </figure>
+            <figure class="poster-variant">
+              <img src="IMG/Poster/ausstellung-04.png" alt="Ausstellungsplakat der KOMMUNIKATIVE!, Farbvariante 4" loading="lazy" decoding="async">
+            </figure>
+          </div>
+        </section>
+      </section>
+
+      <section class="campaign-intro-block">
+        <div class="campaign-kicker">
+        </div>
+        <h1 class="campaign-title">Design, Bildung, Stadt, Gesellschaft.</h1>
+        <p class="campaign-copy">
+          Das Projekt KOMMUNIKATIVE! versammelt Abschluss- und Studienarbeiten aus Darmstadt, Würzburg und Düsseldorf. Die Ausstellung fragt, wie Gestaltung Demokratiebildung, gesellschaftlichen Diskurs und soziale Gerechtigkeit mitprägen kann. Kuratiert von Prof. Tobias Katz, Prof. Dr. Gesa Foken und Dr. Christian Driesen.
+        </p>
+        <div class="exhibition-meta">
+          <span>20.10.–07.11.2026</span>
+          <span>INTeF, Darmstadt</span>
+          <span>Vernissage: 18.10.2026, 12 Uhr</span>
+        </div>
+        <div class="home-arrow-links">
+          <a class="home-arrow-link" onclick="showPage('ausstellung')">13 Arbeiten entdecken</a>
+          <a class="home-arrow-link" onclick="showPage('programm')">Programm &amp; Besuch</a>
+          <a class="home-arrow-link" onclick="scrollToEditorial()">Kuratorisches Konzept</a>
+        </div>
+      </section>
+
+      <section class="initiators-section" id="initiators-anchor" aria-labelledby="initiators-title">
+        <div class="initiators-heading">
+          <h2 id="initiators-title">Kuratiert von</h2>
+          <p>Konzept &amp; Ausstellung</p>
+        </div>
+        <div class="initiators-grid">
+          <article class="initiator-card">
+            <h3><a href="https://design.h-da.de/katz" target="_blank" rel="noopener noreferrer">Prof. Tobias Katz</a></h3>
+            <p>Kurator</p>
+          </article>
+          <article class="initiator-card">
+            <h3><a href="https://design.h-da.de/foken" target="_blank" rel="noopener noreferrer">Prof. Dr. Gesa Foken</a></h3>
+            <p>Kuratorin</p>
+          </article>
+          <article class="initiator-card">
+            <h3><a href="https://design.h-da.de/driesen" target="_blank" rel="noopener noreferrer">Dr. Christian Driesen</a></h3>
+            <p>Kurator</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="triptych-strip">
+        <article class="triptych-panel" onclick="openFilteredView('Politische Bildung & Recht')">
+          <div class="triptych-panel-inner">
+            <span class="triptych-kicker">01 — Themenfeld</span>
+            <h2 class="triptych-headline">Politische Bildung &amp; Verfassung</h2>
+            <p class="triptych-sub">
+              Vom handlungsorientierten Bildungskonzept für Schulen über Perspektivwürfel bis zum durchsichtigen Grundgesetz im Alltag.
+            </p>
+          </div>
+        </article>
+
+        <article class="triptych-panel" onclick="openFilteredView('Öffentlicher Raum & Intervention')">
+          <div class="triptych-panel-inner">
+            <span class="triptych-kicker">02 — Themenfeld</span>
+            <h2 class="triptych-headline">Öffentlicher Raum &amp; Intervention</h2>
+            <p class="triptych-sub">
+              Urbane Teilhabe in Würzburg, der umgedeutete Reichstagsgraben, modulare Sprachrohre und Dritte Orte der Vergemeinschaftung.
+            </p>
+          </div>
+        </article>
+
+        <article class="triptych-panel" onclick="openFilteredView('System, Diskurs & Gesellschaft')">
+          <div class="triptych-panel-inner">
+            <span class="triptych-kicker">03 — Themenfeld</span>
+            <h2 class="triptych-headline">System, Bürokratie &amp; Diskurs</h2>
+            <p class="triptych-sub">
+              Das Formular als Interface zwischen Verwaltung und Mensch, tragbare Biografien in Zeiten erodierender Demokratien und Leseprotokolle.
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <section class="home-exhibition-preview">
+        <div class="section-header-row">
+          <h2 class="section-header-title">Ausgewählte Arbeiten der Ausstellung</h2>
+          <div class="section-header-links">
+            <button class="section-action-btn" onclick="showPage('ausstellung')">Alle 13 Arbeiten ansehen</button>
+            <button class="section-action-btn" onclick="showPage('programm')">Vernissage am 18. Oktober, 12 Uhr</button>
+          </div>
+        </div>
+
+        <div id="home-asymmetric-showcase"></div>
+      </section>
+
+      <section id="editorial-anchor" class="editorial-reading-section">
+        <div>
+          <h2>Kuratorisches Konzept</h2>
+          <p style="color: var(--muted);">
+            Gestaltung als gesellschaftliche Praxis: politisch, gemeinschaftlich und interventionistisch.
+          </p>
+        </div>
+
+        <div>
+          <p>
+            Das Verständnis von Design ist stark durch Industrialisierung, Sozialgeschichte und politische Entwicklungen geprägt und hat somit dezidiert gesellschaftlichen Charakter. In dem Wissen um die Möglichkeiten, an Demokratiebildung und sozialer Gerechtigkeit mitzuwirken, begreift sich engagiertes Design als Fürsprecher emanzipatorischer Praktiken. Gerade junge Designer:innen orientieren sich an einem Design, das ausdrücklich die Gemeinschaft im Blick hat, und nutzen die gestaltungsbasierten Mittel, demokratische Gesellschaft weiterzuentwickeln.
+          </p>
+          <p>
+            Die <strong>KOMMUNIKATIVE!</strong> sucht nach Handlungsoptionen kritischer Sozialpraxis und -theorie, indem sie von interventionistischen Ansätzen konkreter Gestaltung ausgeht.
+          </p>
+        </div>
+
+        <div>
+          <p>
+            Diese zielen auf eine Öffentlichkeit ab, in der nicht nur das Design selbst, sondern ebenso eine demokratisch verfasste Gesellschaft ihren utopischen Kern verwirklicht. Hierfür werden Gestaltungsmöglichkeiten aus den Entwurfsdisziplinen, den Gesellschaftswissenschaften sowie der kritischen Bildungspraxis zusammengedacht und ineinandergefügt.
+          </p>
+          <p>
+            Die Ausstellung gastiert vom 20. Oktober bis 7. November 2026 im Institut für Neue Technische Form (INTeF) in Darmstadt. Vorträge, Diskussionen und partizipative Workshops öffnen das Thema für die Stadtgesellschaft.
+          </p>
+        </div>
+
+        <div>
+          <h2>Hochschulen &amp; Träger</h2>
+          <p style="color: var(--muted);">
+            Hochschule Darmstadt / Fachbereich Gestaltung<br><br>
+            Technische Hochschule Würzburg-Schweinfurt / Fakultät Gestaltung<br><br>
+            Hochschule Düsseldorf / Peter Behrens School of Arts / FB Architektur<br><br>
+            In Kooperation mit der Heinrich-Böll-Stiftung Hessen
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- =========================================================
+         SEITE 2: AUSSTELLUNG
+         ========================================================= -->
+    <section id="page-ausstellung" class="view-page">
+      <div style="padding: clamp(20px, 3vw, 32px) var(--page-pad) 20px var(--page-pad);">
+        <h1 style="font-size: clamp(32px, 5vw, 72px); font-weight: 700; letter-spacing: -0.03em; line-height: 0.95; margin-bottom: 20px;">
+          ARBEITEN DER AUSSTELLUNG
+        </h1>
+
+        <div class="section-header-row" style="padding: 0;">
+          <div class="section-header-title" id="filter-status-label">Alle ausgestellten Arbeiten (12)</div>
+          <div class="section-header-links">
+            <button class="section-action-btn active" onclick="filterCatalog('all', this)">Alle (12)</button>
+            <button class="section-action-btn" onclick="filterCatalog('Politische Bildung & Recht', this)">Politische Bildung &amp; Recht</button>
+            <button class="section-action-btn" onclick="filterCatalog('Öffentlicher Raum & Intervention', this)">Öffentlicher Raum &amp; Intervention</button>
+            <button class="section-action-btn" onclick="filterCatalog('System, Diskurs & Gesellschaft', this)">System, Diskurs &amp; Gesellschaft</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="full-catalog-container"></div>
+    </section>
+
+    <!-- =========================================================
+         SEITE 3: PROGRAMM & BESUCH
+         ========================================================= -->
+    <section id="page-programm" class="view-page">
+      <div class="program-container">
+        <aside class="program-sticky-info">
+          <h1>Programm &amp; Besuch</h1>
+
+          <div class="info-cards-grid">
+            <div>
+              <div class="info-group-label">Ort (Gastinstitution)</div>
+              <div class="info-group-val">
+                KOMMUNIKATIVE! gastiert im:<br>
+                <strong>Institut für Neue Technische Form (INTeF)</strong><br>
+                Friedensplatz 11, 64283 Darmstadt
+              </div>
+            </div>
+
+            <div>
+              <div class="info-group-label">Reguläre Öffnungszeiten</div>
+              <div class="info-group-val">
+                20. Oktober – 7. November 2026<br>
+                Di bis Sa: 11 – 17 Uhr<br>
+                So: 11 – 14 Uhr
+              </div>
+            </div>
+
+            <div>
+              <div class="info-group-label">Vernissage &amp; Finissage</div>
+              <div class="info-group-val">
+                Vernissage: So, 18. Okt. 2026, 12 Uhr<br>
+                Finissage: Sa, 7. Nov. 2026, 15 Uhr
+              </div>
+            </div>
+
+            <div>
+              <div class="info-group-label">Kooperation</div>
+              <div class="info-group-val">
+                Hochschule Darmstadt (h_da)<br>
+                Heinrich-Böll-Stiftung Hessen
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <div class="program-rows">
+          <article class="program-entry">
+            <div class="program-entry-date">Sonntag, 18. Oktober 2026<br>12:00 Uhr</div>
+            <div>
+              <h2 class="program-entry-title">Vernissage mit Vorträgen und Diskussionen</h2>
+              <div class="program-entry-speakers">
+                <strong>Lena Beckmann:</strong> Demokratische Räume erschließen<br>
+                <strong>Kiki Sandoval Pickert:</strong> Wie ist Deine Verfassung?
+              </div>
+            </div>
+            <div class="program-entry-type">▸ Eröffnung</div>
+          </article>
+
+          <article class="program-entry">
+            <div class="program-entry-date">Mittwoch, 21. Oktober 2026<br>18:00 Uhr</div>
+            <div>
+              <h2 class="program-entry-title">Nicht warten – Handlungsspielräume künstlerischer Arbeit in einer sich verändernden Gesellschaft</h2>
+              <div class="program-entry-speakers">
+                <strong>Jan Bonny</strong>
+              </div>
+            </div>
+            <div class="program-entry-type">▸ Vortrag &amp; Diskussion</div>
+          </article>
+
+          <article class="program-entry">
+            <div class="program-entry-date">Mittwoch, 28. Oktober 2026<br>18:00 Uhr</div>
+            <div>
+              <h2 class="program-entry-title">Bildungsgestaltung. gemeinsam Schulbildung entwickeln</h2>
+              <div class="program-entry-speakers">
+                <strong>Christine Bruegel</strong>
+              </div>
+            </div>
+            <div class="program-entry-type">▸ Workshop</div>
+          </article>
+
+          <article class="program-entry">
+            <div class="program-entry-date">Mittwoch, 4. November 2026<br>18:00 Uhr</div>
+            <div>
+              <h2 class="program-entry-title">Kommunalpolitik und Aktivismus im ländlich geprägten Raum</h2>
+              <div class="program-entry-speakers">
+                <strong>Jonas Löschau</strong>
+              </div>
+            </div>
+            <div class="program-entry-type">▸ Vortrag &amp; Diskussion</div>
+          </article>
+
+          <article class="program-entry">
+            <div class="program-entry-date">Freitag, 6. November 2026<br>14:00 Uhr</div>
+            <div>
+              <h2 class="program-entry-title">das Formular. Welcher Mensch ist denkbar?</h2>
+              <div class="program-entry-speakers">
+                <strong>Lemmi Karnop</strong><br>
+                In Kooperation mit dem Hessischen Staatsarchiv
+              </div>
+            </div>
+            <div class="program-entry-type">▸ Workshop</div>
+          </article>
+
+          <article class="program-entry">
+            <div class="program-entry-date">Samstag, 7. November 2026<br>15:00 Uhr</div>
+            <div>
+              <h2 class="program-entry-title">Finissage mit Vorträgen und Diskussionen</h2>
+              <div class="program-entry-speakers">
+                <strong>Lena Breidenbach:</strong> Am Fundament der Demokratie. Eine gestalterische Erwiderung auf den geplanten Reichstagsgraben<br>
+                <strong>Katharina Wildanger:</strong> Democracy in Progress. Neue Wege politischer Bildung
+              </div>
+            </div>
+            <div class="program-entry-type">▸ Finissage</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- =========================================================
+       EXHIBIT SLIDE-OVER DRAWER FÜR EXPONAT-TEXTE (INKL. TOUCH-SWIPE)
+       ========================================================= -->
+  <div id="drawer-overlay" class="drawer-overlay" onclick="closeExhibitDrawer()"></div>
+  <aside id="exhibit-drawer" class="exhibit-drawer" aria-hidden="true">
+    <div class="drawer-top">
+      <span id="drawer-counter" style="color: var(--muted);">01 / 12</span>
+      <button onclick="closeExhibitDrawer()" style="font-size: 10.5px; font-weight: 700; padding: 2px 0;">Schließen ✕</button>
+    </div>
+
+    <div class="drawer-scroll-content">
+      <div class="drawer-artwork-stage">
+        <div id="drawer-specimen" class="drawer-specimen-box">
+          <span id="drawer-specimen-year" style="font-size: 10px;">2026</span>
+          <strong id="drawer-specimen-title" style="font-size: clamp(16px, 2vw, 20px); line-height: 1.1;">Titel</strong>
+          <span id="drawer-specimen-cat" style="font-size: 9.5px; opacity: 0.75;">Kategorie</span>
+        </div>
+        <div id="drawer-image-gallery" class="drawer-image-gallery" hidden>
+        <div id="drawer-image-frame" class="drawer-image-frame" tabindex="0" role="group" aria-label="Bildergalerie">
+          <img id="drawer-gallery-image" src="" alt="">
+        </div>
+        <div class="drawer-gallery-footer">
+          <span id="drawer-gallery-counter" aria-live="polite"></span>
+          <span id="drawer-gallery-hint">Bild unten auswählen oder wischen</span>
+          </div>
+          <div id="drawer-gallery-thumbnails" class="drawer-gallery-thumbnails" aria-label="Bilder auswählen"></div>
+        </div>
+      </div>
+
+      <h2 id="drawer-title" class="drawer-exhibit-title">Titel</h2>
+      <div id="drawer-authors" class="drawer-exhibit-authors">Autor:innen, Jahr</div>
+      <div id="drawer-body" class="drawer-exhibit-body">Beschreibungstext</div>
+    </div>
+
+    <div class="drawer-nav-bottom">
+      <button onclick="stepDrawer(-1)">◂ Vorherige Arbeit</button>
+      <button onclick="stepDrawer(1)">Nächste Arbeit ▸</button>
+    </div>
+  </aside>
+
+  <!-- =========================================================
+       FOOTER MIT SOCIAL-MEDIA-LEISTE & PARTNER-LOGOS
+       ========================================================= -->
+  <footer>
+    <div class="footer-columns">
+      <div>
+        <div class="footer-col-title">KOMMUNIKATIVE! (Projekt)</div>
+        Gestaltungs- und Demokratieprojekt zu Bildung, Stadt und Gesellschaft.<br>
+        Die aktuelle Ausstellung zeigt Arbeiten aus Darmstadt, Würzburg und Düsseldorf.<br>
+        Kuratiert von Prof. Tobias Katz, Prof. Dr. Gesa Foken und Dr. Christian Driesen.<br>
+        In Kooperation mit der Hochschule Darmstadt (h_da) und der Heinrich-Böll-Stiftung Hessen.
+      </div>
+
+      <div>
+        <div class="footer-col-title">Ausstellungsort</div>
+        Zu Gast im:<br>
+        Institut für Neue Technische Form (INTeF)<br>
+        Friedensplatz 11, 64283 Darmstadt
+      </div>
+
+      <div>
+        <div class="footer-col-title">Kontakt Hochschule Darmstadt</div>
+        Hochschule Darmstadt (h_da)<br>
+        Fachbereich Gestaltung<br>
+        Olbrichweg 10, 64287 Darmstadt
+      </div>
+
+      <div>
+        <div class="footer-col-title">Öffnungszeiten</div>
+        Ausstellung: 20. Oktober – 7. November 2026<br>
+        Di bis Sa 11–17 Uhr / So 11–14 Uhr<br>
+        Vernissage: 18. Okt. 2026, 12 Uhr
+      </div>
+    </div>
+
+    <!-- GENERIC STYLE SOCIAL MEDIA LEISTE (SCHMAL) -->
+    <div class="social-media-bar" aria-label="Social Media und Website Fachbereich Gestaltung">
+      <div class="social-links-row">
+        <!-- 1. Website design.h-da.de -->
+        <a class="social-link-item" href="https://design.h-da.de" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="9.5"/>
+            <path d="M2.5 12h19M12 2.5c2.7 2.6 4.2 5.9 4.2 9.5s-1.5 6.9-4.2 9.5c-2.7-2.6-4.2-5.9-4.2-9.5S9.3 5.1 12 2.5z"/>
+          </svg>
+          <span>design.h-da.de</span>
+          <span class="ext-arrow">↗</span>
+        </a>
+
+        <!-- 2. Instagram @fbg_darmstadt -->
+        <a class="social-link-item" href="https://www.instagram.com/fbg_darmstadt/?hl=de" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="4.5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>Instagram (@fbg_darmstadt)</span>
+          <span class="ext-arrow">↗</span>
+        </a>
+
+        <!-- 3. Facebook Fachbereich Gestaltung Darmstadt -->
+        <a class="social-link-item" href="https://www.facebook.com/fachbereich.gestaltung.darmstadt" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M15 3h-2.5C9.8 3 8 4.8 8 7.5V10H5.5v3.5H8V21h3.8v-7.5h3L15.5 10h-3.7V7.8c0-1 .3-1.5 1.5-1.5H15V3z"/>
+          </svg>
+          <span>Facebook (Fachbereich Gestaltung)</span>
+          <span class="ext-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Originale Logoleiste mit den Vektor-SVG-Dateien aus IMG/Logos -->
+    <div class="partner-logo-bar" aria-label="Partner- und Förderlogos">
+      <!-- 1. World Design Capital Frankfurt RheinMain 2026 -->
+      <a class="partner-logo-item logo-wdc" href="https://wdc2026.org" target="_blank" rel="noopener noreferrer" title="World Design Capital Frankfurt RheinMain 2026">
+        <img 
+          src="IMG/Logos/WDC Logo.svg" 
+          alt="World Design Capital Frankfurt RheinMain 2026"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        >
+        <div style="display:none; align-items:center; gap:8px; font-weight:700; font-size:11px; line-height:1.1;">
+          <span style="display:inline-flex; width:26px; height:26px; border-radius:50%; background:#000; color:#fff; align-items:center; justify-content:center; font-weight:300;">+</span>
+          <span>WORLD DESIGN CAPITAL<br><span style="font-weight:400;">FRANKFURT RHEINMAIN 2026</span></span>
+        </div>
+      </a>
+
+      <!-- 2. INTeF (Gastort) -->
+      <a class="partner-logo-item logo-intef" href="https://intef.info" target="_blank" rel="noopener noreferrer" title="Institut für Neue Technische Form (INTeF) — Gastinstitution">
+        <img 
+          src="IMG/Logos/INTeF Logo.svg" 
+          alt="INTeF — Institut für Neue Technische Form"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        >
+        <span style="display:none; font-size:22px; font-weight:700; letter-spacing:-0.03em;">INTeF</span>
+      </a>
+
+      <!-- 3. Heinrich Böll Stiftung Hessen -->
+      <a class="partner-logo-item logo-boell" href="https://www.boell-hessen.de" target="_blank" rel="noopener noreferrer" title="Heinrich-Böll-Stiftung Hessen">
+        <img 
+          src="IMG/Logos/Heinrich Böll Stiftung Hessen Logo.svg" 
+          alt="Heinrich Böll Stiftung Hessen"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+        >
+        <div style="display:none; grid-template-columns:auto auto; gap:2px; font-size:9px; font-weight:700; letter-spacing:0.06em; color:#fff;">
+          <span style="background:#111; padding:2px 5px;">HEINRICH</span>
+          <span style="background:#111; padding:2px 5px;">BÖLL</span>
+          <span style="background:#111; padding:2px 5px;">STIFTUNG</span>
+          <span style="background:#111; padding:2px 5px;">HESSEN</span>
+        </div>
+      </a>
+
+      <!-- 4. K-O Kurzsignet -->
+      <button class="partner-logo-item logo-ko" onclick="showPage('home')" title="KOMMUNIKATIVE! — Zurück nach oben" style="background:none; border:none; padding:0; cursor:pointer;">
+        <img 
+          src="IMG/Logos/K Icon Logo.svg" 
+          alt="KOMMUNIKATIVE! Signet"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';"
+        >
+        <span style="display:none; align-items:center; gap:3px; font-size:22px; font-weight:700;">
+          K<span style="display:inline-block; width:18px; height:18px; border-radius:50%; background:#000;"></span>
+        </span>
+      </button>
+
+      <!-- 5. h_da hochschule darmstadt fachbereich gestaltung / member of eut+ -->
+      <a class="partner-logo-item logo-hda" href="https://design.h-da.de" target="_blank" rel="noopener noreferrer" title="Hochschule Darmstadt — Fachbereich Gestaltung">
+        <img 
+          src="IMG/Logos/hda Logo.svg" 
+          alt="h_da Hochschule Darmstadt Fachbereich Gestaltung — member of eut+"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        >
+        <div style="display:none; align-items:center; gap:14px; font-size:11px; line-height:1.15;">
+          <span style="font-size:22px; font-weight:700;">h_da</span>
+          <span><strong>hochschule darmstadt</strong><br><span style="font-weight:400;">fachbereich gestaltung</span></span>
+          <span style="border-left:1px solid #000; height:28px; transform:rotate(14deg);"></span>
+          <span style="font-size:9px; text-align:center;">member of<br><strong style="font-size:14px;">eut+</strong></span>
+        </div>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // =========================================================
+    // DYNAMISCHER LOGO-WECHSEL (ELEMENT 1 BIS 5) BEI RELOAD & TAB-WECHSEL AUF HOME
+    // =========================================================
+    const kommunikativeLogos = [
+      { file: "IMG/Logos/Kommunikative Logo 1.svg", smallFile: "IMG/Logos/Kommunikative klein 1.svg", hex: "#ea65a7", name: "Pink" },
+      { file: "IMG/Logos/Kommunikative Logo 2.svg", smallFile: "IMG/Logos/Kommunikative klein 2.svg", hex: "#eb2933", name: "Rot" },
+      { file: "IMG/Logos/Kommunikative Logo 3.svg", smallFile: "IMG/Logos/Kommunikative klein 3.svg", hex: "#a3d59e", name: "Grün" },
+      { file: "IMG/Logos/Kommunikative Logo 4.svg", smallFile: "IMG/Logos/Kommunikative klein 4.svg", hex: "#94daca", name: "Mint" },
+      { file: "IMG/Logos/Kommunikative Logo 5.svg", smallFile: "IMG/Logos/Kommunikative klein 5.svg", hex: "#e3a4da", name: "Flieder" }
+    ];
+
+    function initMouseColorTrail() {
+      const canHoverWithMouse = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!canHoverWithMouse || prefersReducedMotion) return;
+
+      let lastPointerX = null;
+      let lastPointerY = null;
+      let lastPointerTime = null;
+      let lastTrailX = null;
+      let lastTrailY = null;
+      let colorIndex = 0;
+
+      window.addEventListener('pointermove', (event) => {
+        if (event.pointerType !== 'mouse') return;
+        if (lastPointerX === null || lastPointerY === null) {
+          lastPointerX = lastTrailX = event.clientX;
+          lastPointerY = lastTrailY = event.clientY;
+          lastPointerTime = event.timeStamp;
+          return;
+        }
+
+        const pointerDeltaX = event.clientX - lastPointerX;
+        const pointerDeltaY = event.clientY - lastPointerY;
+        const elapsed = Math.min(Math.max(event.timeStamp - lastPointerTime, 1), 32);
+        const speed = Math.hypot(pointerDeltaX, pointerDeltaY) / elapsed;
+        const speedIntensity = Math.min(speed / 1.2, 1);
+        const spacing = Math.min(32, Math.max(4, 4 + speed * 20));
+        lastPointerX = event.clientX;
+        lastPointerY = event.clientY;
+        lastPointerTime = event.timeStamp;
+
+        const deltaX = event.clientX - lastTrailX;
+        const deltaY = event.clientY - lastTrailY;
+        const distance = Math.hypot(deltaX, deltaY);
+        const movementAngle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+        const steps = Math.min(Math.floor(distance / spacing), 8);
+        if (!steps) return;
+
+        for (let step = 1; step <= steps; step += 1) {
+          const progress = step / steps;
+          const pixel = document.createElement('span');
+          const color = kommunikativeLogos[colorIndex % kommunikativeLogos.length].hex;
+          const size = 6 + (colorIndex % 3) * 2 + speedIntensity * 3;
+          const drift = 4 + speedIntensity * 10;
+          const rotation = movementAngle + (colorIndex % 6) * 60;
+          pixel.className = 'cursor-color-trail';
+          pixel.setAttribute('aria-hidden', 'true');
+          pixel.style.left = `${lastTrailX + deltaX * progress}px`;
+          pixel.style.top = `${lastTrailY + deltaY * progress}px`;
+          pixel.style.setProperty('--trail-color', color);
+          pixel.style.setProperty('--trail-size', `${size}px`);
+          pixel.style.setProperty('--trail-duration', `${750 - speedIntensity * 300}ms`);
+          pixel.style.setProperty('--trail-rotation', `${rotation}deg`);
+          pixel.style.setProperty('--trail-drift-x', `${Math.cos(movementAngle * Math.PI / 180) * drift}px`);
+          pixel.style.setProperty('--trail-drift-y', `${Math.sin(movementAngle * Math.PI / 180) * drift}px`);
+          pixel.addEventListener('animationend', () => pixel.remove(), { once: true });
+          document.body.appendChild(pixel);
+          colorIndex += 1;
+        }
+
+        lastTrailX = event.clientX;
+        lastTrailY = event.clientY;
+      }, { passive: true });
+    }
+
+    function cycleHeroLogo() {
+      let lastIdx = parseInt(sessionStorage.getItem('komLogoIndex'), 10);
+      if (isNaN(lastIdx)) {
+        lastIdx = -1;
+      }
+      const nextIdx = (lastIdx + 1) % kommunikativeLogos.length;
+      sessionStorage.setItem('komLogoIndex', nextIdx);
+
+      const chosen = kommunikativeLogos[nextIdx];
+      const logoImg = document.getElementById('dynamic-kom-logo');
+      const smallLogoImg = document.getElementById('header-small-logo');
+      const fallbackCircle = document.getElementById('fallback-o-circle');
+      const fallbackSvg = document.getElementById('inline-kom-fallback');
+
+      if (logoImg) {
+        logoImg.src = chosen.file;
+        logoImg.style.display = 'block';
+      }
+      if (smallLogoImg) {
+        smallLogoImg.src = chosen.smallFile;
+      }
+      if (fallbackSvg) {
+        fallbackSvg.style.display = 'none';
+      }
+      if (fallbackCircle) {
+        fallbackCircle.setAttribute('fill', chosen.hex);
+      }
+
+    }
+
+    function handleHeaderLogoClick() {
+      cycleHeroLogo();
+      showPage('home', true);
+    }
+
+    // =========================================================
+    // EXPONAT-DATEN (ALLE 12 POSITIONEN MIT THEMATISCHEN SCHLÜSSELWÖRTERN)
+    // =========================================================
+    const exhibits = [
+      {
+        id: 1,
+        title: "Democracy in Progress",
+        authors: "Katharina Wildanger",
+        year: "2024",
+        category: "Politische Bildung & Recht",
+        color: "#f3b5dc",
+        images: [
+          "IMG/Exponate/Democracy in Progress1.jpg",
+          "IMG/Exponate/Democracy in Progress2.jpg"
+        ],
+        keywords: [
+          "dip", "democracy in progress", "wildanger", "schule", "schulen", "schulsystem",
+          "schüler", "schueler", "schülerin", "schuelerinnen", "jugendliche", "jugend",
+          "workshop", "workshops", "bildung", "bildungsarbeit", "politische bildung", "unterricht",
+          "medienkompetenz", "toolkit", "toolkits", "module", "reflexion", "animation",
+          "digital", "digitale strukturen", "teilhabe", "demokratieförderung", "demokratieverständnis"
+        ],
+        text: "Democracy in Progress (DiP) ist ein handlungsorientiertes politisches Bildungskonzept für Schulen. Es verfolgt das Ziel, junge Menschen für Demokratie und aktive politische Teilhabe zu begeistern und demokratische Transformationsprozesse mittels digitaler Strukturen zu begleiten.\n\nDas Workshop-Konzept gliedert sich in drei Phasen – Information, Reflexion sowie Animation – und fünf Themenbereiche. Dabei stärken verschiedene Module und Toolkits die Medienkompetenz der Schüler:innen und ihr Demokratieverständnis, helfen bei der praktischen Anwendung des Wissens und wecken die Lust an demokratischer Teilhabe. Die Ausstellung zeigt ausgewählte Bestandteile des Projekts und vermittelt einen exemplarischen Einblick in das Konzept, seine Methoden und seine Anwendungsmöglichkeiten."
+      },
+      {
+        id: 2,
+        title: "Bildungsgestaltung. Die Logiken der Beteiligten",
+        authors: "Christine Bruegel",
+        year: "2026",
+        category: "Politische Bildung & Recht",
+        color: "#9cd1c8",
+        images: [
+          "IMG/Exponate/Bildungsgestaltung. Die Logiken der Beteiligten1.jpg",
+          "IMG/Exponate/Bildungsgestaltung. Die Logiken der Beteiligten2.jpg",
+          "IMG/Exponate/Bildungsgestaltung. Die Logiken der Beteiligten3.jpg"
+        ],
+        keywords: [
+          "bildungsgestaltung", "christine bruegel", "brügel", "bruegel", "würfel", "wuerfel",
+          "perspektiven", "schulsystem", "schule", "schulen", "lehrende", "lehrer", "lehrkräfte",
+          "lehrkraefte", "lernende", "schüler", "schueler", "erziehende", "eltern", "schulpolitik",
+          "politik", "akteure", "kommunikationsmodell", "dialog", "pädagogik", "paedagogik",
+          "bildung", "bildungsforschung", "interaktiv", "wechselwirkungen", "orientierung"
+        ],
+        text: "Das ausgestellte Kommunikationsmodell stellt neun Perspektiven des Schulsystems ins Zentrum. Lehrende, Lernende, Erziehende, Politik und weitere Akteure haben unterschiedliche Verantwortlichkeiten, Interessen und Zielvorstellungen. Sie blicken deshalb auch unterschiedlich auf Schule und Bildung.\n\nJede Perspektive wird durch einen Würfel dargestellt. Die sechs Seiten des Würfels stehen für zentrale Bereiche, die aus dieser Perspektive relevant sind. Erst wenn die Perspektiven miteinander in Beziehung gesetzt und die Würfel gedreht werden, werden Zusammenhänge, Unterschiede und Wechselwirkungen sichtbar. Das offene Kommunikationsmodell ermöglicht einen anschaulichen Zugang zur Komplexität schulischer Bildung. Es kann genutzt werden, um Orientierung zu gewinnen, eigene Sichtweisen zu reflektieren und den Dialog zu unterstützen."
+      },
+      {
+        id: 3,
+        title: "Werkstadt Würzburg",
+        authors: "Simon Kähler",
+        year: "2023",
+        category: "Öffentlicher Raum & Intervention",
+        color: "#b4d1a4",
+        images: [
+          "IMG/Exponate/Werkstadt Würzburg1.jpg",
+          "IMG/Exponate/Werkstadt Würzburg2.jpg"
+        ],
+        keywords: [
+          "werkstadt", "würzburg", "wuerzburg", "simon kähler", "kaehler", "urban",
+          "urbaner raum", "öffentlicher raum", "oeffentlicher raum", "stadt", "stadtplanung",
+          "stadtentwicklung", "mobil", "wagen", "tafel", "tafelanschrift", "tafelanschriften",
+          "fragebogen", "fragebogenantworten", "intervention", "schulen", "klassenzimmer",
+          "bürgerbeteiligung", "buergerbeteiligung", "bürger", "buerger", "partizipation", "mitgestaltung"
+        ],
+        text: "Was bedeutet eigentlich öffentlicher Raum? Inwiefern ist er verbunden mit einer demokratischen Gesellschaft? Was verbinden Einwohner:innen mit „ihrem“ urbanen Raum und wie würden sie ihn verändern? Diese und mehr Fragen bildeten die Grundlage für das Projekt, das durch teilhabeorientierte Ansätze Gestalt annahm.\n\nAntworten wurden formuliert im Rahmen von öffentlichen Tafelanschriften und skizzierten Fragebogenantworten. Der öffentliche Raum und dessen Gestaltung war Diskussionsthema in Workshops mit drei Klassen an verschiedenen Schulen und mündete in schriftliche, gemalte und räumlich gestaltete Vorschläge zur Verbesserung des gemeinsam geteilten Raums in der Stadt. Wiederkehrender Mittelpunkt des Workshops war ein multifunktionaler, umbaubarer Wagen, der die WERKSTADT in die Klassenzimmer brachte."
+      },
+      {
+        id: 4,
+        title: "Graben. Am Fundament der Demokratie",
+        authors: "Lena Breidenbach",
+        year: "2026",
+        category: "Öffentlicher Raum & Intervention",
+        color: "#d43b36",
+        textColor: "#ffffff",
+        images: ["IMG/Exponate/Graben. Am Fundament der Demokratie.jpg"],
+        keywords: [
+          "graben", "fundament", "reichstag", "reichstagsgraben", "bundestag", "parlament",
+          "berlin", "lena breidenbach", "breidenbach", "sicherheitsgraben", "sicherheitsarchitektur",
+          "sicherheit", "abschottung", "rückzug", "rueckzug", "erdquerschnitt", "zylinder",
+          "kerne", "schubladen", "schubladensystem", "architektur", "betonwand", "forschung",
+          "forscher", "intervention", "politik"
+        ],
+        text: "Seit einigen Jahren ist in Berlin eine Sicherheitsarchitektur mit potenziell großem Symbolcharakter in Planung: ein Graben um den Reichstag. Ein Graben vor dem Parlament Deutschlands könnte ein falsches Signal senden: Rückzug und Abschottung der Politik.\n\nDas Gestaltungskonzept „Am Fundament der Demokratie“ verwandelt den Graben von einer reinen Sicherheitsmaßnahme zu einem Ort der Reflexion und politischen Bildung. Über die Metapher des Grabens als Prozess wird die Betonwand des Sicherheitsgrabens umgedeutet zu einem Erdquerschnitt, der das Fundament der Demokratie freilegt. Themen und Inhalte des Fundaments werden über zylinderförmige Medienträger: Kerne, erzählt, die als Schubladensystem in die Wand eingelassen sind. Besuchende werden zu Forscher:innen, die Kern für Kern dem Fundament der Demokratie auf den Grund gehen können."
+      },
+      {
+        id: 5,
+        title: "Identität im bürokratischen System",
+        authors: "Lemmi Karnop",
+        year: "2026",
+        category: "System, Diskurs & Gesellschaft",
+        color: "#e2dfd7",
+        images: [
+          "IMG/Exponate/Identität im bürokratischen System1.jpg",
+          "IMG/Exponate/Identität im bürokratischen System2.jpg"
+        ],
+        keywords: [
+          "identität", "identitaet", "bürokratie", "buerokratie", "bürokratisch", "buerokratisch",
+          "lemmi karnop", "karnop", "verwaltung", "amt", "behörde", "behoerde", "bürgeramt",
+          "buergeramt", "dokumente", "dokument", "formular", "formulare", "interface",
+          "schnittstelle", "episches theater", "metadaten", "kategorien", "rationalisierung",
+          "staat", "papierkram", "untersuchungsstation", "partizipativ"
+        ],
+        text: "Bei der Arbeit handelt es sich um eine modulare Untersuchungsstation, die Dokumente als Interface zwischen Verwaltung und Gesellschaft betrachtet. Sie untersucht den Einfluss bürokratischer Strukturen und ihrer rationalisierten Kategorien auf die Gesellschaft und ihre Individuen.\n\nIm Zentrum steht das Formular – ein Werkzeug, um verborgene Ebenen verwaltender Dokumente lesbar zu machen: ihre Metadaten, politischen Hintergründe, Identitäts(re-)konstruktionen und mehr. Die Arbeit verbindet Ansätze des partizipativen Designs mit Methoden des epischen Theaters und sucht nach Möglichkeiten, Designpraxis mit wissenschaftlicher Haltung zu verknüpfen."
+      },
+      {
+        id: 6,
+        title: "Soziale Plastik",
+        authors: "Paul Abendschein, Benjamin Fuchs, Johannes Gärtner",
+        year: "2026",
+        category: "Öffentlicher Raum & Intervention",
+        color: "#ec82c2",
+        images: ["IMG/Exponate/Soziale Plastik.jpg"],
+        keywords: [
+          "soziale plastik", "knete", "kneten", "knetmasse", "rosa", "rosafarben",
+          "paul abendschein", "abendschein", "benjamin fuchs", "fuchs", "johannes gärtner",
+          "gaertner", "dritter ort", "dritte orte", "vergemeinschaftung", "gemeinschaft",
+          "einsamkeit", "krisen", "skulptur", "plastik", "beuys", "berühren", "beruehren",
+          "formen", "spielen", "spiel", "haufen", "begegnung", "haptik", "interaktion"
+        ],
+        text: "Wenn Menschen angesichts von Krieg, Klimawandel und multiplen gesellschaftlichen Krisen in eine ungewisse Zukunft blicken, nehmen Gefühle von Angst, Überforderung und Orientierungslosigkeit zu. Ein wichtiger Gegenpol zu dieser Entwicklung sind Dritte Orte – Orte der anlasslosen Vergemeinschaftung. Sie mindern Einsamkeit, stärken Zugehörigkeit und wirken damit stabilisierend auf demokratische Gesellschaften.\n\nUnsere soziale Plastik ist der Versuch, einen solchen dritten Ort in reduzierter, temporärer Form zu gestalten. Ein etwa drei Kilogramm schwerer, rosafarbener Haufen Knete lädt im öffentlichen Raum zum Berühren, Formen und Spielen ein und ermöglicht so Begegnung."
+      },
+      {
+        id: 7,
+        title: "Sag ma, hör ma",
+        authors: "Céline Bärz, Ella Haun, Marlene Kuhn, Stephanie Merz",
+        year: "2026",
+        category: "Öffentlicher Raum & Intervention",
+        color: "#9cd1c8",
+        images: [
+          "IMG/Exponate/Sag ma, hör ma1.jpg",
+          "IMG/Exponate/Sag ma, hör ma2.jpg",
+          "IMG/Exponate/Sag ma, hör ma3.jpg"
+        ],
+        keywords: [
+          "sag ma hör ma", "sag ma hoer ma", "sprachrohr", "sprachrohre", "sprachrohrsystem",
+          "céline bärz", "baerz", "ella haun", "haun", "marlene kuhn", "kuhn", "stephanie merz", "merz",
+          "hören", "hoeren", "sprechen", "akustik", "schall", "rohr", "steckprinzip", "stecksystem",
+          "frage des tages", "dialog", "begegnung", "gespräch", "gespraech", "zuhören", "zuhoeren",
+          "kommunikation", "öffentlicher raum", "oeffentlicher raum", "austausch"
+        ],
+        text: "Demokratien sind abhängig vom öffentlichen Raum. Er sollte – ob physisch oder medial – für alle zugänglich sein und eine integrative Kommunikation ermöglichen. Durch ihn nehmen wir uns als Gesellschaft wahr, verstehen wir unsere Verantwortung als Bürger. Wollen wir Demokratie stärken, müssen wir die gesamtgesellschaftliche Kommunikation stärken.\n\nDas modulare Sprachrohrsystem überwindet Distanzen und schafft dynamische Orte der Begegnung. Durch ein einfaches Steckprinzip werden zwei Orte akustisch miteinander verbunden. Herzstück der Installation ist die „Frage des Tages“. Sie dient als Impuls, um miteinander ins Gespräch zu kommen und aus dem gewohnten Gesprächsumfeld auszubrechen. So öffnet sich ein Raum für echte Begegnungen und entsteht Öffentlichkeit."
+      },
+      {
+        id: 8,
+        title: "Dystopia suits (me)",
+        authors: "Elias Khater",
+        year: "2026",
+        category: "System, Diskurs & Gesellschaft",
+        color: "#222222",
+        textColor: "#ffffff",
+        images: [
+          "IMG/Exponate/Dystopia suits (me)1.jpg",
+          "IMG/Exponate/Dystopia suits (me)2.jpg"
+        ],
+        keywords: [
+          "dystopia suits me", "dystopia", "dystopie", "dystopisch", "anzug", "anzüge",
+          "anzuege", "elias khater", "khater", "kleidung", "flucht", "fliehen", "überleben",
+          "ueberleben", "überwachung", "ueberwachung", "überwachungsstaat", "autoritär",
+          "autoritaer", "autoritarismus", "repression", "tragbare biografie", "gepäck", "gepaeck",
+          "notfall", "survival", "jacke", "taschen", "desinformation", "verfassungsschutz"
+        ],
+        text: "Demokratien erodieren: Unabhängige Institutionen werden untergraben, Gewaltenteilung gerät unter Druck, der Überwachungsstaat wird ausgebaut, der Verfassungsschutz delegitimiert, Journalist:innen erfahren Repression, Desinformation erschwert politische Teilhabe. Die weltweite Zunahme autoritärer Regierungsformen wird zu einer Realität, mit der wir uns alle auseinandersetzen.\n\nDie Arbeit greift die damit verbundenen Ängste auf. Der maßgeschneiderte Anzug folgt einem dystopischen Gedankenspiel: Was nimmst du mit, wenn du fliehen musst? Welche Gegenstände sind es, die Identität, Wohlbefinden oder Überleben sichern? Die Gegenstände sind sowohl funktional, sentimental und humoristisch. Sie werden im Anzug zur tragbaren Biografie."
+      },
+      {
+        id: 9,
+        title: "AutomatischFrei",
+        authors: "Lena Beckmann, Kianush Marvymofrad, Emilie Müschen, Jan Wagner, Lukas Wellhausen",
+        year: "2021",
+        category: "Öffentlicher Raum & Intervention",
+        color: "#d8d8d8",
+        images: [
+          "IMG/Exponate/AutomatischFrei1.jpg",
+          "IMG/Exponate/AutomatischFrei2.jpg"
+        ],
+        keywords: [
+          "automatischfrei", "zeitung", "zeitungen", "zeitungsautomat", "automat", "kiosk",
+          "presse", "pressefreiheit", "journalismus", "journalist", "journalisten",
+          "journalistinnen", "medien", "berichterstattung", "lena beckmann", "beckmann",
+          "kianush marvymofrad", "emilie müschen", "mueschen", "jan wagner", "lukas wellhausen",
+          "boulevard", "boulevardmedien", "meinungsfreiheit", "zensur", "recherche",
+          "populismus", "inhaftiert", "verfolgt", "architektur"
+        ],
+        text: "Die Arbeit ist Resultat einer studentischen Auseinandersetzung mit den Potenzialen gestalterischer Studien für zivilgesellschaftliche Intervention. Dieser Anspruch materialisiert sich sowohl im entworfenen Objekt selbst als auch in dessen Inszenierung im öffentlichen Raum.\n\nIm Zentrum steht eine farblos illustrierte Zeitung, die die im Architekturstudium erworbenen Kenntnisse und Fähigkeiten nutzt, um die Geschichten inhaftierter, verfolgter, bedrohter oder ermordeter Journalist:innen zu erzählen. Ihre Präsentation in einem mit Boulevardmedien assoziierten Automaten fungiert als räumliches Mittel, auf die Gefahren populistischer Berichterstattung für den Journalismus hinzuweisen."
+      },
+      {
+        id: 10,
+        title: "Wie ist Deine Verfassung?",
+        authors: "Melanie Schablack, Kiki Sandoval Pickert, Meret Recker, Rica Weißenbruch, Donja Zahedi Saysan, Sören Hartmann",
+        year: "2021",
+        category: "Politische Bildung & Recht",
+        color: "#b4d1a4",
+        images: [
+          "IMG/Exponate/Wie ist Deine Verfassung%3F1.jpg",
+          "IMG/Exponate/Wie ist Deine Verfassung%3F2.jpg",
+          "IMG/Exponate/Wie ist Deine Verfassung%3F3.jpg",
+          "IMG/Exponate/Wie ist Deine Verfassung%3F4.jpg",
+          "IMG/Exponate/Wie ist Deine Verfassung%3F5.jpg",
+          "IMG/Exponate/Wie ist Deine Verfassung%3F6.jpg"
+        ],
+        keywords: [
+          "wie ist deine verfassung", "verfassung", "grundgesetz", "artikel", "12 artikel",
+          "alltag", "alltagsprodukte", "alltagskultur", "designobjekte", "melanie schablack",
+          "schablack", "kiki sandoval pickert", "sandoval", "pickert", "meret recker", "recker",
+          "rica weißenbruch", "weissenbruch", "donja zahedi saysan", "sören hartmann",
+          "soeren hartmann", "wohnungsnot", "gleichstellung", "familie", "außenpolitik",
+          "integration", "inklusion", "gerechtigkeit", "bürger", "buerger", "recht", "gesetz"
+        ],
+        text: "Das Projekt soll durch seine Produkte jedem/r Bürger:in Deutschlands die Möglichkeit geben, Politik im Alltag zu leben. Ziel ist es, das deutsche Grundgesetz, die Verfassung, erstmals kennenzulernen und diese mit der eigenen Situation zu verbinden. Damit ist die Grundlage für einen potenziellen politischen und sozialkritischen Dialog geschaffen.\n\nDie Verfassung wird im Alltag sichtbar und erlebbar, indem Produkte mit visueller Konstante angeboten werden, die sich in die Alltagskultur einbetten lassen. Zwölf Artikel aus dem Grundgesetz sind mit zwölf Artikeln des täglichen Lebens verknüpft. Leitthemen hierbei sind u.a. Wohnungsnot, Gleichstellung der Geschlechter, Familien- und Außenpolitik, Integration sowie Gerechtigkeit und Inklusion in der Gesellschaft."
+      },
+      {
+        id: 11,
+        title: "In/Transparentes Grundgesetz",
+        authors: "Céline Bärz, Vincent Bonifer, Lili Briggmann, Maximilian Buchwalsky, Christian Driesen, Cosima English, Johannes Gärtner, Pauline Hahn, Ella Haun, Friederike Hoßfeld, Anna Huber, Gizem Ilgün, Marlene Kuhn, Katharina Leichtling, Maren Schröder, Anastasiya Sultanova, Jamie Vogel, Emir Can Yilmaz",
+        year: "2026",
+        category: "Politische Bildung & Recht",
+        color: "#ffffff",
+        images: ["IMG/Exponate/In:Transparentes Grundgesetz.jpg"],
+        keywords: [
+          "in transparentes grundgesetz", "transparent", "transparenz", "grundgesetz",
+          "verfassung", "schrift", "typografie", "papier", "endlospapier", "text", "druck",
+          "wortlaut", "bundesrepublik", "rechtsnormen", "céline bärz", "vincent bonifer",
+          "johannes gärtner", "gaertner", "emir can yilmaz", "yilmaz", "marlene kuhn",
+          "ella haun", "lili briggmann", "maximilian buchwalsky", "gesetzeswerk", "lesung"
+        ],
+        text: "Das Grundgesetz ist die Verfassung der Bundesrepublik Deutschland. Es steht über allen Rechtsnormen und bildet zugleich das Fundament unserer Demokratie. Als Text liegt es unserer Gesellschaft zugrunde; Buchstabe für Buchstabe, Wort für Wort entwirft diese Schrift eine Welt.\n\nAllein, diese Grundlage unseres Zusammenlebens ist nur Wenigen bekannt. Ließe sich gemeinsam darauf besinnen, könnte alles anders sein. Um zu sich, zu uns selbst zu kommen, gilt es daher, die grundlegende Schrift für alle durchsichtig zu machen – indem sie endlos zu Papier gebracht wird, immer wieder anders, unter, über, neben sich stehend, gänzlich ihrem Wortlaut treu."
+      },
+      {
+        id: 12,
+        title: "Design-Demokratie-Konnex",
+        authors: "Paul Abendschein, Damian Eischer Antonorsi, Lilian Backes, Christine Bruegel, Charlotte Burfeind, Neel Dede, Jonathan Hasse, Kaya Kapotas, Lola Korff, Leo Krug, Hannah Lang, Sascha Neumann, Hannah Reinhard, Dominik Schmid",
+        year: "2026",
+        category: "System, Diskurs & Gesellschaft",
+        color: "#f3b5dc",
+        images: ["IMG/Exponate/Design-Demokratie-Konnex.jpg"],
+        keywords: [
+          "design-demokratie-konnex", "konnex", "theorie", "designtheorie", "demokratietheorie",
+          "leseprotokolle", "protokolle", "recherche", "literatur", "wissenschaft", "diskurs",
+          "quellen", "beteiligungsprozesse", "paul abendschein", "abendschein", "christine bruegel",
+          "bruegel", "gesellschaft", "analyse", "praxis", "forschung"
+        ],
+        text: "Die Arbeit ermöglicht Einblick in einen intensiven Rechercheprozess zu gesellschaftsorientierten Designtheorien und Designprojekten mit besonderem Fokus auf Demokratiethemen, ergänzt um wichtige Quellen zur Demokratietheorie und demokratischen Beteiligungsprozessen.\n\nUnser Analyse- und Diskussionsprozess wird durch das Anlegen von Leseprotokollen strukturiert und für andere festgehalten. Die Protokolle regen dazu an, sich mit grundlegenden Fragen des Zusammenhangs von Design und Demokratie auseinanderzusetzen. Geht uns Gesellschaft an? Inwiefern kann Design in gesellschaftlichen Prozessen eine Rolle spielen? Gibt es eine Demokratietheorie und eine demokratische Praxis des Designs?"
+      },
+    ];
+
+    // Nummerierung wie in der Ausstellungsübersicht; Kategorien bleiben unverändert.
+    const exhibitOrder = [9, 10, 11, 1, 2, 3, 6, 7, 8, 5, 4, 12];
+    const orderedExhibits = exhibitOrder.map(id => exhibits.find(exhibit => exhibit.id === id));
+    if (orderedExhibits.length !== exhibits.length || new Set(orderedExhibits).size !== exhibits.length || orderedExhibits.includes(undefined)) {
+      throw new Error('Die PDF-Nummerierung konnte nicht auf alle Exponate abgebildet werden.');
+    }
+    orderedExhibits.forEach((exhibit, index) => {
+      exhibit.id = index + 1;
+    });
+    exhibits.splice(0, exhibits.length, ...orderedExhibits);
+
+    // --- Intelligente Such- und Matching-Engine (Fuzzy, Stemming, Synonyme) ---
+    function normalizeSearchText(str) {
+      if (!str) return '';
+      return str
+        .toLowerCase()
+        .replace(/ä/g, 'ae')
+        .replace(/ö/g, 'oe')
+        .replace(/ü/g, 'ue')
+        .replace(/ß/g, 'ss')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    // Leichter deutscher Stemmer für Wortformen (z.B. kneten -> knet, schulen -> schul)
+    function stemGerman(word) {
+      if (!word || word.length < 4) return word;
+      let w = word;
+      const suffixes = [
+        'ungen', 'innen', 'schaft', 'heiten', 'keiten',
+        'ung', 'heit', 'keit', 'lich', 'isch',
+        'en', 'er', 'es', 'em', 'st', 'te', 'nd',
+        'e', 's'
+      ];
+      for (const suf of suffixes) {
+        if (w.endsWith(suf) && (w.length - suf.length) >= 3) {
+          w = w.slice(0, -suf.length);
+          break;
+        }
+      }
+      return w;
+    }
+
+    // Levenshtein-Distanz für Tippfehlertoleranz
+    function levenshteinDistance(a, b) {
+      if (a === b) return 0;
+      if (!a.length) return b.length;
+      if (!b.length) return a.length;
+      const dp = Array.from({ length: a.length + 1 }, () => new Array(b.length + 1).fill(0));
+      for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+      for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+          dp[i][j] = Math.min(
+            dp[i - 1][j] + 1,
+            dp[i][j - 1] + 1,
+            dp[i - 1][j - 1] + cost
+          );
+        }
+      }
+      return dp[a.length][b.length];
+    }
+
+    // Token-Abgleich mit Berücksichtigung von Exaktheit, Wortstamm und Ähnlichkeit
+    function matchToken(token, candidate) {
+      if (!token || !candidate) return 0;
+      if (token === candidate) return 40;
+      if (candidate.startsWith(token)) return 34;
+      if (candidate.includes(token)) return 28;
+      if (token.startsWith(candidate) && candidate.length >= 4) return 24;
+
+      // Stemming-Abgleich (z. B. kneten <-> knete)
+      const st = stemGerman(token);
+      const sc = stemGerman(candidate);
+      if (st === sc) return 32;
+      if (sc.startsWith(st) || st.startsWith(sc)) {
+        if (Math.min(st.length, sc.length) >= 3) return 26;
+      }
+
+      // Tippfehler-Toleranz (Fuzzy)
+      const maxDist = token.length >= 7 ? 2 : (token.length >= 4 ? 1 : 0);
+      if (maxDist > 0 && Math.abs(token.length - candidate.length) <= maxDist) {
+        const d = levenshteinDistance(token, candidate);
+        if (d <= maxDist) {
+          return 22 - d * 5;
+        }
+      }
+      return 0;
+    }
+
+    // Berechnet die Relevanz-Punktzahl einer Arbeit für eine Suchanfrage
+    function scoreExhibitMatch(exhibit, rawQuery) {
+      const qNorm = normalizeSearchText(rawQuery);
+      if (!qNorm) return 0;
+      const tokens = qNorm.split(' ').filter(Boolean);
+      if (!tokens.length) return 0;
+
+      const titleTokens = normalizeSearchText(exhibit.title).split(' ').filter(Boolean);
+      const authorTokens = normalizeSearchText(exhibit.authors).split(' ').filter(Boolean);
+      const catTokens = normalizeSearchText(exhibit.category).split(' ').filter(Boolean);
+      const textTokens = normalizeSearchText(exhibit.text).split(' ').filter(Boolean).slice(0, 100);
+      const rawKeywords = (exhibit.keywords || []).map(k => normalizeSearchText(k)).filter(Boolean);
+
+      let totalScore = 0;
+
+      for (const tok of tokens) {
+        let bestTokenScore = 0;
+
+        // 1. Titel
+        for (const ct of titleTokens) {
+          const s = matchToken(tok, ct);
+          if (s > 0) bestTokenScore = Math.max(bestTokenScore, s * 1.8);
+        }
+
+        // 2. Keywords (sehr hoch gewichtet)
+        for (const kw of rawKeywords) {
+          if (tok === kw) {
+            bestTokenScore = Math.max(bestTokenScore, 65);
+          } else if (kw.includes(tok)) {
+            bestTokenScore = Math.max(bestTokenScore, 50);
+          } else {
+            for (const part of kw.split(' ')) {
+              const s = matchToken(tok, part);
+              if (s > 0) bestTokenScore = Math.max(bestTokenScore, s * 1.5);
+            }
+          }
+        }
+
+        // 3. Autoren
+        for (const at of authorTokens) {
+          const s = matchToken(tok, at);
+          if (s > 0) bestTokenScore = Math.max(bestTokenScore, s * 1.4);
+        }
+
+        // 4. Kategorie
+        for (const cat of catTokens) {
+          const s = matchToken(tok, cat);
+          if (s > 0) bestTokenScore = Math.max(bestTokenScore, s * 1.1);
+        }
+
+        // 5. Beschreibungstext
+        for (const tx of textTokens) {
+          const s = matchToken(tok, tx);
+          if (s > 0) bestTokenScore = Math.max(bestTokenScore, s * 0.85);
+        }
+
+        // Wenn ein Token gar keinen Treffer erzielt, kein Match für Mehrwortsuchen
+        if (bestTokenScore === 0) {
+          return 0;
+        }
+        totalScore += bestTokenScore;
+      }
+
+      return totalScore;
+    }
+
+    let activeDrawerIndex = 0;
+    let drawerGalleryImages = [];
+    let drawerGalleryIndex = 0;
+
+    function createTileImageHTML(item) {
+      const image = item.images?.[0];
+      return image
+        ? `<img class="tile-background-image" src="${image}" alt="" loading="lazy" decoding="async">`
+        : '';
+    }
+
+    function updateDrawerGallery() {
+      const image = document.getElementById('drawer-gallery-image');
+      const counter = document.getElementById('drawer-gallery-counter');
+      const thumbnails = document.getElementById('drawer-gallery-thumbnails');
+      const currentImage = drawerGalleryImages[drawerGalleryIndex];
+      const exhibit = exhibits[activeDrawerIndex];
+
+      image.classList.remove('is-landscape');
+      image.onload = () => {
+        image.classList.toggle('is-landscape', image.naturalWidth > image.naturalHeight);
+      };
+      image.src = currentImage;
+      if (image.complete && image.naturalWidth > 0) {
+        image.classList.toggle('is-landscape', image.naturalWidth > image.naturalHeight);
+      }
+      image.alt = `${exhibit.title} – Ansicht ${drawerGalleryIndex + 1} von ${drawerGalleryImages.length}`;
+      counter.textContent = `${drawerGalleryIndex + 1} / ${drawerGalleryImages.length}`;
+
+      thumbnails.hidden = drawerGalleryImages.length < 2;
+      document.getElementById('drawer-gallery-hint').hidden = drawerGalleryImages.length < 2;
+      thumbnails.replaceChildren();
+      drawerGalleryImages.forEach((src, index) => {
+        const button = document.createElement('button');
+        const thumbnail = document.createElement('img');
+        button.type = 'button';
+        button.className = 'drawer-gallery-thumbnail';
+        button.setAttribute('aria-label', `Ansicht ${index + 1} anzeigen`);
+        button.setAttribute('aria-current', String(index === drawerGalleryIndex));
+        thumbnail.src = src;
+        thumbnail.alt = '';
+        thumbnail.loading = 'lazy';
+        button.appendChild(thumbnail);
+        button.addEventListener('click', () => {
+          drawerGalleryIndex = index;
+          updateDrawerGallery();
+        });
+        thumbnails.appendChild(button);
+      });
+    }
+
+    function stepDrawerGallery(direction) {
+      if (drawerGalleryImages.length < 2) return;
+      drawerGalleryIndex = (drawerGalleryIndex + direction + drawerGalleryImages.length) % drawerGalleryImages.length;
+      updateDrawerGallery();
+    }
+
+    function initializeDrawerGallerySwipe() {
+      const frame = document.getElementById('drawer-image-frame');
+      let startX = 0;
+      let startY = 0;
+
+      frame.addEventListener('pointerdown', event => {
+        startX = event.clientX;
+        startY = event.clientY;
+      });
+      frame.addEventListener('pointerup', event => {
+        const deltaX = event.clientX - startX;
+        const deltaY = event.clientY - startY;
+        if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY)) {
+          stepDrawerGallery(deltaX < 0 ? 1 : -1);
+        }
+      });
+      frame.addEventListener('keydown', event => {
+        if (event.key === 'ArrowLeft') stepDrawerGallery(-1);
+        if (event.key === 'ArrowRight') stepDrawerGallery(1);
+      });
+    }
+
+    function createAsymmetricGroupHTML(groupItems, featureOnRight = false) {
+      if (!groupItems.length) return '';
+      const featureItem = featureOnRight ? groupItems[groupItems.length - 1] : groupItems[0];
+      const smallItems = featureOnRight ? groupItems.slice(0, -1) : groupItems.slice(1);
+
+      const featureIdx = exhibits.findIndex(e => e.id === featureItem.id);
+      const featureFg = featureItem.textColor || '#000000';
+      const featureNum = String(featureItem.id).padStart(2, '0');
+      const featureImage = createTileImageHTML(featureItem);
+
+      const featureHTML = `
+        <article class="feature-tall-Wrap" onclick="openExhibitDrawer(${featureIdx})">
+          <div class="feature-tall-card${featureImage ? ' has-image' : ''}">
+            ${featureImage}
+            <span class="tile-index">${featureNum}</span>
+            <div class="object-specimen" style="background: ${featureItem.color}; color: ${featureFg};">
+              <span style="font-size: 10px;">${featureItem.year}</span>
+              <strong style="font-size: clamp(16px, 1.8vw, 26px); line-height: 1.08; letter-spacing: -0.02em;">${featureItem.title}</strong>
+              <span style="font-size: 10px; opacity: 0.8;">${featureItem.category}</span>
+            </div>
+            <span class="tile-action">Ansicht öffnen</span>
+          </div>
+          <div class="tile-caption">
+            <div>
+              <div>${featureItem.title}</div>
+              <div class="tile-caption-muted">${featureItem.authors}</div>
+            </div>
+            <span>${featureItem.year}</span>
+          </div>
+        </article>
+      `;
+
+      const smallHTML = smallItems.map(item => {
+        const idx = exhibits.findIndex(e => e.id === item.id);
+        const fg = item.textColor || '#000000';
+        const num = String(item.id).padStart(2, '0');
+        const image = createTileImageHTML(item);
+        return `
+          <article class="small-tile-wrap" onclick="openExhibitDrawer(${idx})">
+            <div class="small-tile-card${image ? ' has-image' : ''}">
+              ${image}
+              <span class="tile-index" style="font-size: 9.5px;">${num}</span>
+              <div class="object-specimen" style="background: ${item.color}; color: ${fg}; width: 78%;">
+                <span style="font-size: 9px;">${item.year}</span>
+                <strong style="font-size: clamp(12px, 1.1vw, 14px); line-height: 1.12; letter-spacing: -0.01em;">${item.title}</strong>
+                <span style="font-size: 8.5px; opacity: 0.75;">KOMMUNIKATIVE!</span>
+              </div>
+              <span></span>
+            </div>
+            <div class="tile-caption">
+              <div>
+                <div>${item.title}</div>
+                <div class="tile-caption-muted">${item.authors}</div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      return `
+        <div class="asymmetric-showcase-block${featureOnRight ? ' feature-on-right' : ''}">
+          ${featureOnRight ? smallHTML + featureHTML : featureHTML + smallHTML}
+        </div>
+      `;
+    }
+
+    const HOME_SHOWCASE_CYCLE_MS = 3 * 24 * 60 * 60 * 1000;
+    const HOME_SHOWCASE_ITEM_COUNT = 5;
+    let renderedHomeShowcaseCycle = -1;
+
+    function getHomeShowcaseCycleIndex() {
+      return Math.floor(Date.now() / HOME_SHOWCASE_CYCLE_MS);
+    }
+
+    function getRandomizedHomeShowcase(cycleIndex) {
+      let seed = cycleIndex || 1;
+      const nextRandom = () => {
+        seed = (seed * 1664525 + 1013904223) % 4294967296;
+        return seed / 4294967296;
+      };
+      const shuffledExhibits = [...exhibits];
+
+      for (let index = shuffledExhibits.length - 1; index > 0; index -= 1) {
+        const randomIndex = Math.floor(nextRandom() * (index + 1));
+        [shuffledExhibits[index], shuffledExhibits[randomIndex]] =
+          [shuffledExhibits[randomIndex], shuffledExhibits[index]];
+      }
+
+      return shuffledExhibits.slice(0, HOME_SHOWCASE_ITEM_COUNT);
+    }
+
+    function renderHomeShowcase() {
+      const container = document.getElementById('home-asymmetric-showcase');
+      const cycleIndex = getHomeShowcaseCycleIndex();
+      if (cycleIndex === renderedHomeShowcaseCycle) return;
+
+      renderedHomeShowcaseCycle = cycleIndex;
+      container.innerHTML = createAsymmetricGroupHTML(getRandomizedHomeShowcase(cycleIndex));
+    }
+
+    function scheduleHomeShowcaseRotation() {
+      const nextCycleAt = (getHomeShowcaseCycleIndex() + 1) * HOME_SHOWCASE_CYCLE_MS;
+      window.setTimeout(() => {
+        renderHomeShowcase();
+        scheduleHomeShowcaseRotation();
+      }, Math.max(nextCycleAt - Date.now(), 1000));
+    }
+
+    function renderFullCatalog(list = exhibits, query = '') {
+      const container = document.getElementById('full-catalog-container');
+      if (!list || list.length === 0) {
+        const escaped = (query || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        container.innerHTML = `
+          <div class="search-empty-state">
+            <div class="search-empty-title">Keine Arbeiten gefunden für „${escaped || 'Deine Suche'}“</div>
+            <p class="search-empty-text">Versuche es mit einem anderen Begriff oder stöbere durch diese Themen:</p>
+            <div class="search-suggestions">
+              <button type="button" class="search-suggestion-chip" onclick="applySearchSuggestion('Demokratie')">Demokratie</button>
+              <button type="button" class="search-suggestion-chip" onclick="applySearchSuggestion('Knete')">Knete</button>
+              <button type="button" class="search-suggestion-chip" onclick="applySearchSuggestion('Schule')">Schule</button>
+              <button type="button" class="search-suggestion-chip" onclick="applySearchSuggestion('Reichstag')">Reichstag</button>
+              <button type="button" class="search-suggestion-chip" onclick="applySearchSuggestion('Bürokratie')">Bürokratie</button>
+              <button type="button" class="search-suggestion-chip" onclick="applySearchSuggestion('Presse')">Presse</button>
+              <button type="button" class="search-suggestion-chip" onclick="applySearchSuggestion('Grundgesetz')">Grundgesetz</button>
+              <button type="button" class="search-suggestion-chip" onclick="applySearchSuggestion('Sprachrohr')">Sprachrohr</button>
+              <button type="button" class="search-suggestion-chip" onclick="applySearchSuggestion('Würzburg')">Würzburg</button>
+            </div>
+            <button type="button" class="search-reset-btn" onclick="clearSearch()">Alle Arbeiten anzeigen</button>
+          </div>
+        `;
+        return;
+      }
+      let html = '';
+      for (let i = 0; i < list.length; i += 5) {
+        const chunk = list.slice(i, i + 5);
+        const featureOnRight = chunk.length > 1 && Math.floor(i / 5) % 2 === 1;
+        html += createAsymmetricGroupHTML(chunk, featureOnRight);
+      }
+      container.innerHTML = html;
+    }
+
+    function applySearchSuggestion(term) {
+      const input = document.getElementById('search-input');
+      if (input) {
+        input.value = term;
+        handleSearch(term);
+        input.focus();
+      }
+    }
+
+    function filterCatalog(category, btnEl) {
+      const searchInput = document.getElementById('search-input');
+      closeSearchMobile();
+      if (searchInput && searchInput.value.trim()) clearSearch(false);
+
+      document.querySelectorAll('#page-ausstellung .section-action-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+
+      const filtered = category === 'all'
+        ? exhibits
+        : exhibits.filter(e => e.category === category);
+
+      document.getElementById('filter-status-label').textContent =
+        category === 'all' ? `Alle ausgestellten Arbeiten (${filtered.length})` : `${category} (${filtered.length})`;
+
+      renderFullCatalog(filtered);
+    }
+
+    function openFilteredView(category) {
+      showPage('ausstellung');
+      const buttons = document.querySelectorAll('#page-ausstellung .section-action-btn');
+      buttons.forEach(b => {
+        if (b.textContent.includes(category.split(' ')[0])) {
+          filterCatalog(category, b);
+        }
+      });
+    }
+
+    function handleSearch(query) {
+      const clearBtn = document.getElementById('search-clear-btn');
+      const qTrimmed = (query || '').trim();
+      if (clearBtn) {
+        clearBtn.style.display = qTrimmed.length > 0 ? 'inline-flex' : 'none';
+      }
+
+      if (!qTrimmed) {
+        renderFullCatalog(exhibits);
+        const statusLabel = document.getElementById('filter-status-label');
+        if (statusLabel) statusLabel.textContent = `Alle ausgestellten Arbeiten (${exhibits.length})`;
+        return;
+      }
+
+      showPage('ausstellung', false, true);
+
+      // Relevanz-Scoring mit Synonymen, Keywords, Wortstamm und Fuzzy-Matching
+      const scored = [];
+      for (const ex of exhibits) {
+        const score = scoreExhibitMatch(ex, qTrimmed);
+        if (score > 0) {
+          scored.push({ exhibit: ex, score });
+        }
+      }
+
+      scored.sort((a, b) => b.score - a.score);
+      const results = scored.map(s => s.exhibit);
+
+      const statusLabel = document.getElementById('filter-status-label');
+      if (statusLabel) {
+        if (results.length > 0) {
+          statusLabel.textContent = `Suchergebnisse für „${qTrimmed}“ (${results.length})`;
+        } else {
+          statusLabel.textContent = `Keine Treffer für „${qTrimmed}“`;
+        }
+      }
+
+      renderFullCatalog(results, qTrimmed);
+    }
+
+    function handleSearchClick() {
+      if (window.innerWidth <= 768) {
+        openSearchMobile();
+      } else {
+        const input = document.getElementById('search-input');
+        if (input) input.focus();
+      }
+    }
+
+    function openSearchMobile() {
+      const topBar = document.getElementById('main-top-bar');
+      const input = document.getElementById('search-input');
+      if (topBar) topBar.classList.add('search-active');
+      if (input) {
+        input.focus();
+        if (input.value.length > 0) {
+          const clearBtn = document.getElementById('search-clear-btn');
+          if (clearBtn) clearBtn.style.display = 'inline-flex';
+        }
+      }
+    }
+
+    function closeSearchMobile() {
+      const topBar = document.getElementById('main-top-bar');
+      if (topBar && topBar.classList.contains('search-active')) {
+        clearSearch(false);
+        document.getElementById('search-input').blur();
+      }
+      if (topBar) topBar.classList.remove('search-active');
+    }
+
+    function clearSearch(restoreFocus = true) {
+      const input = document.getElementById('search-input');
+      if (input) {
+        input.value = '';
+        handleSearch('');
+        if (restoreFocus) input.focus();
+      }
+      const clearBtn = document.getElementById('search-clear-btn');
+      if (clearBtn) clearBtn.style.display = 'none';
+    }
+
+    function isIOSDevice() {
+      return /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    }
+    let drawerScrollState = null;
+
+    function lockPageScrollForDrawer() {
+      if (drawerScrollState) return;
+
+      const body = document.body;
+      const isIOS = isIOSDevice();
+      drawerScrollState = {
+        scrollY: window.scrollY,
+        isIOS,
+        overflow: body.style.overflow
+      };
+      if (!isIOS) body.style.overflow = 'hidden';
+    }
+
+    function unlockPageScrollForDrawer() {
+      if (!drawerScrollState) return null;
+
+      const state = drawerScrollState;
+      drawerScrollState = null;
+      if (!state.isIOS) document.body.style.overflow = state.overflow;
+      return state;
+    }
+
+    function refreshIOSPageAfterDrawerClose(savedScrollY) {
+      const body = document.body;
+      const fixedBodyTop = body.style.position === 'fixed'
+        ? Number.parseFloat(body.style.top)
+        : NaN;
+      const scrollY = Number.isFinite(fixedBodyTop)
+        ? Math.max(0, -fixedBodyTop)
+        : savedScrollY;
+
+      body.style.position = '';
+      body.style.top = '';
+      body.style.left = '';
+      body.style.right = '';
+      body.style.width = '';
+      body.style.overflow = '';
+
+      const rootStyle = document.documentElement.style;
+      const previousScrollBehavior = rootStyle.scrollBehavior;
+      rootStyle.scrollBehavior = 'auto';
+      window.scrollTo(0, scrollY);
+
+      requestAnimationFrame(() => {
+        if (document.getElementById('exhibit-drawer').classList.contains('open')) {
+          rootStyle.scrollBehavior = previousScrollBehavior;
+          return;
+        }
+
+        const currentScrollY = window.scrollY;
+        window.scrollTo(0, currentScrollY === 0 ? 1 : currentScrollY - 1);
+        requestAnimationFrame(() => {
+          if (!document.getElementById('exhibit-drawer').classList.contains('open')) {
+            window.scrollTo(0, scrollY);
+          }
+          rootStyle.scrollBehavior = previousScrollBehavior;
+        });
+      });
+    }
+
+    function openExhibitDrawer(index) {
+      activeDrawerIndex = index;
+      const item = exhibits[index];
+      const drawer = document.getElementById('exhibit-drawer');
+      const drawerContent = drawer.querySelector('.drawer-scroll-content');
+      const num = String(item.id).padStart(2, '0');
+      const fg = item.textColor || '#000000';
+
+      drawerContent.scrollTop = 0;
+      document.getElementById('drawer-counter').textContent = `${num} / ${exhibits.length} — ${item.category}`;
+      const artworkStage = document.querySelector('.drawer-artwork-stage');
+      const imageGallery = document.getElementById('drawer-image-gallery');
+      drawerGalleryImages = item.images || [];
+      drawerGalleryIndex = 0;
+      artworkStage.classList.toggle('has-images', drawerGalleryImages.length > 0);
+      imageGallery.hidden = drawerGalleryImages.length === 0;
+      if (drawerGalleryImages.length > 0) updateDrawerGallery();
+      const spec = document.getElementById('drawer-specimen');
+      spec.style.background = item.color;
+      spec.style.color = fg;
+
+      document.getElementById('drawer-specimen-year').textContent = item.year;
+      document.getElementById('drawer-specimen-title').textContent = item.title;
+      document.getElementById('drawer-specimen-cat').textContent = item.category;
+
+      document.getElementById('drawer-title').textContent = item.title;
+      document.getElementById('drawer-authors').textContent = `${item.authors} (${item.year})`;
+      document.getElementById('drawer-body').textContent = item.text;
+
+      document.getElementById('drawer-overlay').classList.add('open');
+      drawer.classList.add('open');
+      lockPageScrollForDrawer();
+    }
+
+    function closeExhibitDrawer() {
+      const drawer = document.getElementById('exhibit-drawer');
+      const wasOpen = drawer.classList.contains('open');
+      document.getElementById('drawer-overlay').classList.remove('open');
+      drawer.classList.remove('open');
+      const scrollState = unlockPageScrollForDrawer();
+
+      if (wasOpen && isIOSDevice()) {
+        refreshIOSPageAfterDrawerClose(scrollState ? scrollState.scrollY : window.scrollY);
+      }
+    }
+
+    function stepDrawer(dir) {
+      const next = (activeDrawerIndex + dir + exhibits.length) % exhibits.length;
+      openExhibitDrawer(next);
+    }
+
+    initializeDrawerGallerySwipe();
+
+    let scrollTicking = false;
+    function updateScrollLogo() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const isHome = document.getElementById('page-home').classList.contains('active');
+      const scrollThreshold = 45;
+
+      if (!isHome || scrollY > scrollThreshold) {
+        document.body.classList.add('logo-scrolled');
+      } else {
+        document.body.classList.remove('logo-scrolled');
+      }
+      scrollTicking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!scrollTicking) {
+        window.requestAnimationFrame(updateScrollLogo);
+        scrollTicking = true;
+      }
+    }, { passive: true });
+
+    function showPage(pageId, scroll = true, preserveSearch = false) {
+      const wasHomeActive = document.getElementById('page-home').classList.contains('active');
+      const searchInput = document.getElementById('search-input');
+      if (!preserveSearch) {
+        if (searchInput && searchInput.value.trim()) clearSearch(false);
+        document.getElementById('main-top-bar').classList.remove('search-active');
+        if (searchInput) searchInput.blur();
+      }
+
+      document.querySelectorAll('.view-page').forEach(p => p.classList.remove('active'));
+      document.getElementById(`page-${pageId}`).classList.add('active');
+
+      document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+      const activeNav = document.getElementById(`nav-${pageId}`);
+      if (activeNav) activeNav.classList.add('active');
+
+      if (pageId === 'home') {
+        cycleHeroLogo();
+      }
+
+      updateScrollLogo();
+
+      if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToEditorial() {
+      const wasHomeActive = document.getElementById('page-home').classList.contains('active');
+      if (!wasHomeActive) {
+        showPage('home', false);
+      }
+      document.querySelectorAll('.nav-links button').forEach(button => button.classList.remove('active'));
+      document.getElementById('nav-about').classList.add('active');
+      const el = document.getElementById('editorial-anchor');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Touch-Swipe-Unterstützung für das Exponat-Drawer auf Smartphone & Tablet
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const drawerEl = document.getElementById('exhibit-drawer');
+
+    drawerEl.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    drawerEl.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 65) {
+        if (diff < 0) stepDrawer(1);  // Swipe nach links -> Nächste Arbeit
+        if (diff > 0) stepDrawer(-1); // Swipe nach rechts -> Vorherige Arbeit
+      }
+    }, { passive: true });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (document.getElementById('exhibit-drawer').classList.contains('open')) {
+          closeExhibitDrawer();
+        } else {
+          closeSearchMobile();
+        }
+      }
+    });
+
+    // Initialisierung
+    initMouseColorTrail();
+    cycleHeroLogo();
+    updateScrollLogo();
+    renderHomeShowcase();
+    renderFullCatalog();
+    scheduleHomeShowcaseRotation();
+  </script>
+</body>
+</html>
