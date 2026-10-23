@@ -2734,10 +2734,17 @@
     let drawerGalleryImages = [];
     let drawerGalleryIndex = 0;
 
+    function encodeExhibitImagePath(path) {
+      return decodeURIComponent(path)
+        .split('/')
+        .map(segment => encodeURIComponent(segment.normalize('NFD')))
+        .join('/');
+    }
+
     function createTileImageHTML(item) {
       const image = item.images?.[0];
       return image
-        ? `<img class="tile-background-image" src="${image}" alt="" loading="lazy" decoding="async">`
+        ? `<img class="tile-background-image" src="${encodeExhibitImagePath(image)}" alt="" loading="lazy" decoding="async">`
         : '';
     }
 
@@ -2752,7 +2759,7 @@
       image.onload = () => {
         image.classList.toggle('is-landscape', image.naturalWidth > image.naturalHeight);
       };
-      image.src = currentImage;
+      image.src = encodeExhibitImagePath(currentImage);
       if (image.complete && image.naturalWidth > 0) {
         image.classList.toggle('is-landscape', image.naturalWidth > image.naturalHeight);
       }
@@ -2769,7 +2776,7 @@
         button.className = 'drawer-gallery-thumbnail';
         button.setAttribute('aria-label', `Ansicht ${index + 1} anzeigen`);
         button.setAttribute('aria-current', String(index === drawerGalleryIndex));
-        thumbnail.src = src;
+        thumbnail.src = encodeExhibitImagePath(src);
         thumbnail.alt = '';
         thumbnail.loading = 'lazy';
         button.appendChild(thumbnail);
