@@ -971,6 +971,31 @@
       align-items: baseline;
     }
 
+    .program-event-details {
+      grid-column: 1 / -1;
+      display: block;
+    }
+
+    .program-event-summary {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 200px 1fr 130px;
+      gap: clamp(12px, 2vw, 24px);
+    }
+
+    .program-event-content {
+      margin-left: calc(200px + clamp(12px, 2vw, 24px));
+    }
+
+    .program-event-content .program-speaker-content {
+      margin-left: 0;
+    }
+
+    .program-entry-indicator {
+      display: inline-block;
+      margin-right: 3px;
+    }
+
     .program-entry-date {
       font-size: clamp(11.5px, 0.95vw, 12.5px);
       font-weight: 700;
@@ -987,6 +1012,35 @@
       font-size: clamp(12px, 0.95vw, 13px);
       line-height: 1.6;
       color: #222;
+    }
+
+    .program-speaker-content {
+      display: grid;
+      grid-template-columns: clamp(88px, 13vw, 132px) minmax(0, 1fr);
+      align-items: start;
+      gap: clamp(12px, 2vw, 20px);
+      margin: 14px 0 12px 20px;
+    }
+
+    .program-speaker-content img {
+      display: block;
+      width: 100%;
+      max-height: 190px;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+    }
+
+    .program-speaker-content p {
+      margin: 0 0 12px;
+    }
+
+    .program-speaker-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .program-speaker-photo-credit {
+      color: var(--muted);
+      font-size: 10px;
     }
 
     .program-entry-type {
@@ -1420,6 +1474,15 @@
       .program-entry {
         grid-template-columns: 1fr;
         gap: 6px;
+      }
+
+      .program-event-summary {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .program-event-content {
+        margin-left: 0;
       }
 
       .program-entry-type {
@@ -1962,26 +2025,58 @@
 
         <div class="program-rows">
           <article class="program-entry">
-            <div class="program-entry-date">Sonntag, 18. Oktober 2026<br>12:00 Uhr</div>
-            <div>
-              <h2 class="program-entry-title">Vernissage mit Vorträgen und Diskussionen</h2>
-              <div class="program-entry-speakers">
-                <strong>Lena Beckmann:</strong> Demokratische Räume erschließen<br>
-                <strong>Kiki Sandoval Pickert:</strong> Wie ist Deine Verfassung?
+            <div class="program-event-details">
+              <div class="program-event-summary">
+                <div class="program-entry-date">Sonntag, 18. Oktober 2026<br>12:00 Uhr</div>
+                <div>
+                  <h2 class="program-entry-title">Vernissage mit Vorträgen und Diskussionen</h2>
+                  <div class="program-entry-speakers">
+                    <strong>Lena Beckmann:</strong> Demokratische Räume erschließen<br>
+                    <strong>Kiki Sandoval-Pickert:</strong> Wie ist Deine Verfassung?
+                  </div>
+                </div>
+                <div class="program-entry-type"><span class="program-entry-indicator" aria-hidden="true">▾</span> Eröffnung</div>
+              </div>
+              <div class="program-event-content">
+                <div class="program-speaker-content">
+                  <img src="IMG/Programm:Bilder/Lena Beckmann.jpg" alt="Lena Beckmann">
+                  <div>
+                    <p>Lena Beckmann arbeitet als Stadtplanerin im Raum Berlin. Nach einem Bachelorstudium der Architektur in Düsseldorf entschied sie sich für einen Maßstabssprung und absolvierte ihren Master in Urban Design an der TU Berlin. Ausgehend von einer im Rahmen des Architekturstudiums entstandenen Arbeit zu den Potentialen gestalterischer Mittel für zivilgesellschaftliche Intervention verweist sie in ihrem Vortrag auf die Notwendigkeit lernender Lehre für eine verantwortungsvolle gestalterische Praxis.</p>
+                    <p>Die Arbeit „Automatisch Frei“ ist Resultat einer studentischen Auseinandersetzung mit den Potentialen gestalterischer Studien für zivilgesellschaftliche Intervention. Dieser Anspruch materialisiert sich sowohl im entworfenen Objekt selbst als auch in dessen Inszenierung im öffentlichen Raum. Im Zentrum steht eine farblos illustrierte Zeitung, die die im Architekturstudium erworbenen Kenntnisse und Fähigkeiten nutzbar zu machen bemüht ist, die Geschichten inhaftierter, verfolgter, bedrohter oder aufgrund ihrer Berichterstattung ermordeter Journalist:innen zu erzählen. Ihre Präsentation in einem mit Boulevardmedien assoziierten Automaten wirkt darüber hinaus als räumliches Mittel, auf die Gefahren populistischer Berichterstattung für den Journalismus hinzuweisen.</p>
+                    <p class="program-speaker-photo-credit">Bildrechte: Oliver Wagner</p>
+                  </div>
+                </div>
+                <div class="program-speaker-content">
+                  <img src="IMG/Programm:Bilder/Kiki Sandoval-Pickert.jpg" alt="Kiki Sandoval-Pickert">
+                  <div>
+                    <p>Kiki Sandoval-Pickert (geb. 1988 in Brasilien) ist ausgebildete:r Designer:in und Innenarchitekt:in und auch als Bühnen- und Kostümbildner:in tätig. Kiki arbeitet interdisziplinär im Spannungsfeld zwischen Kunst, Kultur und Design. Dabei reizen Kiki vor allem die sozial-ökonomischen Beziehungen und Qualitäten zwischen Visuell-Taktilem und den Rezipient:innen. Vorgestellt wird das Projekt „WIE IST DEINE VERFASSUNG?“ und wie dieses eine Brücke hin zu einem zugewandten Miteinander bauen kann.</p>
+                    <p>Die „WIE IST DEINE VERFASSUNG?“-Artikel wollen Bürger:innen das deutsche Grundgesetz – unsere Verfassung – näherbringen, um so Politik im täglichen Diskurs zu integrieren. Ziel ist es, die Verfassung im Alltag sicht- und greifbarer zu machen. Die bewusst reduziert gestalteten Produkte der Kollektion wurden mit Sorgfalt kuratiert; 12 Artikel des deutschen Grundgesetzes mit 12 Artikeln der Alltagskultur verknüpft. Leitthemen hierbei sind unter anderem Gendergerechtigkeit, Familien- und Außenpolitik, Wohnungsnot, Diversität sowie Integration und Inklusion in unserer Gesellschaft. Dabei werden unterschiedliche Alltagssituationen und soziale Missstände reflektiert, kritisch hinterfragt und Vorurteile und Klischees provokativ eingesetzt, um so einen aktiven Dialog in der Öffentlichkeit zu fördern.</p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="program-entry-type">▸ Eröffnung</div>
           </article>
 
           <article class="program-entry">
-            <div class="program-entry-date">Mittwoch, 21. Oktober 2026<br>18:00 Uhr</div>
-            <div>
-              <h2 class="program-entry-title">Nicht warten – Handlungsspielräume künstlerischer Arbeit in einer sich verändernden Gesellschaft</h2>
-              <div class="program-entry-speakers">
-                <strong>Jan Bonny</strong>
+            <div class="program-event-details">
+              <div class="program-event-summary">
+                <div class="program-entry-date">Mittwoch, 21. Oktober 2026<br>18:00 Uhr</div>
+                <div>
+                  <h2 class="program-entry-title">Nicht warten – Handlungsspielräume künstlerischer Arbeit in einer sich verändernden Gesellschaft</h2>
+                  <div class="program-entry-speakers"><strong>Jan Bonny</strong></div>
+                </div>
+                <div class="program-entry-type"><span class="program-entry-indicator" aria-hidden="true">▾</span> Vortrag &amp; Diskussion</div>
+              </div>
+              <div class="program-event-content">
+                <div class="program-speaker-content">
+                  <img src="IMG/Programm:Bilder/Jan Bonny.jpg" alt="Jan Bonny">
+                  <div>
+                    <p>Jan Bonny ist deutscher Film- und Theaterregisseur. Seine Filme feierten internationale Premieren, etwa in Cannes, Berlinale und Locarno, und wurden zahlreich ausgezeichnet, unter anderem mit dem Preis der Deutschen Filmkritik. Er arbeitete am Theater für die Volksbühne Berlin, das Theater Basel und weitere Häuser. Darüber hinaus nahm er an Ausstellungen teil, etwa im mumok Wien und im Haus der Kunst München.</p>
+                    <p>Sein Vortrag mit dem Titel „Nicht warten“ beschreibt die Chancen und Bedingungen schneller künstlerischer Intervention.</p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="program-entry-type">▸ Vortrag &amp; Diskussion</div>
           </article>
 
           <article class="program-entry">
@@ -1992,18 +2087,29 @@
                 <strong>Christine Bruegel</strong>
               </div>
             </div>
-            <div class="program-entry-type">▸ Workshop</div>
+            <div class="program-entry-type"><span class="program-entry-indicator" aria-hidden="true">▾</span> Workshop</div>
           </article>
 
           <article class="program-entry">
-            <div class="program-entry-date">Mittwoch, 4. November 2026<br>18:00 Uhr</div>
-            <div>
-              <h2 class="program-entry-title">Kommunalpolitik und Aktivismus im ländlich geprägten Raum</h2>
-              <div class="program-entry-speakers">
-                <strong>Jonas Löschau</strong>
+            <div class="program-event-details">
+              <div class="program-event-summary">
+                <div class="program-entry-date">Mittwoch, 4. November 2026<br>18:00 Uhr</div>
+                <div>
+                  <h2 class="program-entry-title">Kommunalpolitik und Aktivismus im ländlich geprägten Raum</h2>
+                  <div class="program-entry-speakers"><strong>Jonas Löschau</strong></div>
+                </div>
+                <div class="program-entry-type"><span class="program-entry-indicator" aria-hidden="true">▾</span> Vortrag &amp; Diskussion</div>
+              </div>
+              <div class="program-event-content">
+                <div class="program-speaker-content">
+                  <img src="IMG/Programm:Bilder/Jonas Löschau.jpg" alt="Jonas Löschau">
+                  <div>
+                    <p>Unsere Demokratie ist im Wandel – am greifbarsten wird das abseits der Großstädte. Haben Parteien hier noch eine Zukunft? Was treibt Menschen auseinander und welche Formate bringen sie wieder zusammen? Bautzen, eine Mittelstadt in Ostsachsen, steht symbolisch für diese Fragen: rechte Mehrheiten, Abwahlverfahren gegen Bürgermeister, Angriffe auf Minderheiten.</p>
+                    <p>Jonas Löschau (26) ist Stadt- und Kreisrat, organisiert den lokalen CSD und berichtet von den politischen Entwicklungen seiner Heimatstadt.</p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="program-entry-type">▸ Vortrag &amp; Diskussion</div>
           </article>
 
           <article class="program-entry">
@@ -2015,7 +2121,7 @@
                 In Kooperation mit dem Hessischen Staatsarchiv
               </div>
             </div>
-            <div class="program-entry-type">▸ Workshop</div>
+            <div class="program-entry-type"><span class="program-entry-indicator" aria-hidden="true">▾</span> Workshop</div>
           </article>
 
           <article class="program-entry">
@@ -2027,7 +2133,7 @@
                 <strong>Katharina Wildanger:</strong> Democracy in Progress. Neue Wege politischer Bildung
               </div>
             </div>
-            <div class="program-entry-type">▸ Finissage</div>
+            <div class="program-entry-type"><span class="program-entry-indicator" aria-hidden="true">▾</span> Finissage</div>
           </article>
         </div>
       </div>
