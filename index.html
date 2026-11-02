@@ -442,7 +442,7 @@
 
     .poster-variants-heading {
       display: flex;
-      align-items: baseline;
+      align-items: start;
       justify-content: space-between;
       gap: 16px;
       padding-bottom: 12px;
@@ -981,6 +981,7 @@
       display: grid;
       grid-template-columns: 200px 1fr 130px;
       gap: clamp(12px, 2vw, 24px);
+      align-items: baseline;
     }
 
     .program-event-content {
@@ -1022,12 +1023,20 @@
       margin: 14px 0 12px 20px;
     }
 
+    .program-speaker-content-text-only {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
     .program-speaker-content img {
       display: block;
       width: 100%;
       max-height: 190px;
       aspect-ratio: 3 / 4;
       object-fit: cover;
+    }
+
+    .program-speaker-content img.program-speaker-photo-grayscale {
+      filter: grayscale(100%);
     }
 
     .program-speaker-content p {
@@ -1041,6 +1050,43 @@
     .program-speaker-photo-credit {
       color: var(--muted);
       font-size: 10px;
+    }
+
+    .legal-page-container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: clamp(28px, 4vw, 56px) var(--page-pad);
+    }
+
+    .legal-page-container > h1 {
+      font-size: clamp(32px, 5vw, 64px);
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    .legal-page-sections {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(28px, 4vw, 48px);
+      max-width: 760px;
+    }
+
+    .legal-page-block h2 {
+      font-size: clamp(20px, 2vw, 26px);
+      margin-bottom: 14px;
+    }
+
+    .legal-page-block h2:not(:first-child) {
+      margin-top: clamp(24px, 3vw, 36px);
+    }
+
+    .legal-page-block p {
+      margin-bottom: 14px;
+    }
+
+    .legal-page-block p:last-child {
+      margin-bottom: 0;
     }
 
     .program-entry-type {
@@ -2069,7 +2115,7 @@
               </div>
               <div class="program-event-content">
                 <div class="program-speaker-content">
-                  <img src="IMG/Programm:Bilder/Jan Bonny.jpg" alt="Jan Bonny">
+                  <img class="program-speaker-photo-grayscale" src="IMG/Programm:Bilder/Jan Bonny.jpg" alt="Jan Bonny">
                   <div>
                     <p>Jan Bonny ist deutscher Film- und Theaterregisseur. Seine Filme feierten internationale Premieren, etwa in Cannes, Berlinale und Locarno, und wurden zahlreich ausgezeichnet, unter anderem mit dem Preis der Deutschen Filmkritik. Er arbeitete am Theater für die Volksbühne Berlin, das Theater Basel und weitere Häuser. Darüber hinaus nahm er an Ausstellungen teil, etwa im mumok Wien und im Haus der Kunst München.</p>
                     <p>Sein Vortrag mit dem Titel „Nicht warten“ beschreibt die Chancen und Bedingungen schneller künstlerischer Intervention.</p>
@@ -2115,7 +2161,7 @@
               </div>
               <div class="program-event-content">
                 <div class="program-speaker-content">
-                  <img src="IMG/Programm:Bilder/Jonas%20Lo%CC%88schau.jpg" alt="Jonas Löschau">
+                  <img class="program-speaker-photo-grayscale" src="IMG/Programm:Bilder/Jonas%20Lo%CC%88schau.jpg" alt="Jonas Löschau">
                   <div>
                     <p>Unsere Demokratie ist im Wandel – am greifbarsten wird das abseits der Großstädte. Haben Parteien hier noch eine Zukunft? Was treibt Menschen auseinander und welche Formate bringen sie wieder zusammen? Bautzen, eine Mittelstadt in Ostsachsen, steht symbolisch für diese Fragen: rechte Mehrheiten, Abwahlverfahren gegen Bürgermeister, Angriffe auf Minderheiten.</p>
                     <p>Jonas Löschau (26) ist Stadt- und Kreisrat, organisiert den lokalen CSD und berichtet von den politischen Entwicklungen seiner Heimatstadt.</p>
@@ -2139,8 +2185,7 @@
                 <div class="program-entry-type"><span class="program-entry-indicator" aria-hidden="true">▾</span> Workshop</div>
               </div>
               <div class="program-event-content">
-                <div class="program-speaker-content">
-                  <img src="IMG/Exponate/Identität im bürokratischen System1.jpg" alt="Projektmaterial zu Identität im bürokratischen System">
+                <div class="program-speaker-content program-speaker-content-text-only">
                   <div>
                     <p>Wie (re-)konstruieren verwaltende Dokumente, die uns in unserem Alltag begleiten, die Gesellschaft und ihre Individuen? Das ist die Kernfrage des interdisziplinären Forschungsprojekts »Identität im bürokratischen System«, das bislang aktuelle Formulare, Ausweise und Verträge untersucht hat.</p>
                     <p>Am Freitag, den 06.11., haben wir die Möglichkeit, im Hessischen Staatsarchiv Darmstadt die Perspektiven der Arbeit auf historische Verwaltungsstrukturen zu eröffnen. Teilnehmende erwartet:</p>
@@ -2171,6 +2216,7 @@
                 <div class="program-speaker-content">
                   <img src="IMG/Programm:Bilder/Lena Breidenbach.jpg" alt="Lena Breidenbach">
                   <div>
+                    <p>Lena Breidenbach hat ihren Bachelor in Kommunikationsdesign an der Fakultät Gestaltung in Würzburg abgeschlossen. Aktuell studiert sie im Master Museumswissenschaft und Empirische Kulturwissenschaft. Als Szenografin konzipiert und gestaltet sie in einem Gestaltungsbüro Ausstellungen und EXPO-Pavillons.</p>
                     <p>Ein Graben vor dem deutschen Parlament. Genau das wird in den nächsten Jahren vor dem Reichstag in Berlin Realität. Doch welche symbolische Wirkung wird das geplante Bauprojekt auf Besuchende und Bürger*innen entfalten? Wird der Graben Tendenzen der Abschottung und Spaltung weiter verstärken?</p>
                     <p>Die Bachelorarbeit „Am Fundament der Demokratie“ setzt sich mit der Bedeutung des Ästhetischen in der Politik auseinander. Das Gestaltungskonzept und der Vortrag von Lena Breidenbach eröffnen einen Ansatz, der eine umstrittene Sicherheitsmaßnahme in einen Ort der Reflexion und politischen Bildung verwandelt.</p>
                   </div>
@@ -2178,6 +2224,7 @@
                 <div class="program-speaker-content">
                   <img src="IMG/Programm:Bilder/Katharina Wildanger.jpg" alt="Katharina Wildanger">
                   <div>
+                    <p>Katharina Wildanger ist Kommunikationsdesignerin mit einem Schwerpunkt auf ganzheitlicher Markenentwicklung sowie Transformation- und Social Design. Sie absolvierte Bachelor (Kommunikationsdesign) und Master (Informationsdesign) an der Fakultät Gestaltung Würzburg und untersuchte dabei unter anderem, wie Designprozesse demokratische Teilhabe fördern und gesellschaftliche Zukunftsgestaltung unterstützen können. Aktuell arbeitet sie als Designerin bei Strichpunkt Identity.</p>
                     <p><em>Democracy in Progress</em> ist ein handlungsorientiertes politisches Bildungskonzept für Schulen, das junge Menschen für Demokratie und politische Teilhabe begeistert und demokratische Transformationsprozesse anhand digitaler Strukturen begleitet. Ein dreistufiges Workshop-Konzept mit verschiedenen Modulen und Toolkits fördert demokratische Partizipation und stärkt spielerisch die Medienkompetenz der Schüler:innen.</p>
                     <p>Katharina Wildanger erörtert auf dieser Grundlage designbasierte Ansätze für die politische Bildung.</p>
                   </div>
@@ -2185,6 +2232,58 @@
               </div>
             </div>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-impressum" class="view-page">
+      <div class="legal-page-container">
+        <h1>Impressum</h1>
+
+        <div class="legal-page-sections">
+          <section class="legal-page-block" aria-labelledby="legal-impressum-title">
+            <h2 id="legal-impressum-title">Angaben gemäß § 5 DDG</h2>
+            <p>
+              <a href="https://h-da.de/impressum/" target="_blank" rel="noopener noreferrer">Hochschule Darmstadt (h_da)</a><br>
+              Körperschaft des öffentlichen Rechts und staatliche Einrichtung<br>
+              Schöfferstraße 3, 64295 Darmstadt<br>
+              Gesetzlich vertreten durch den Präsidenten Prof. Dr. Arnd Steinmetz<br>
+              Telefon: +49 6151 533-5000<br>
+              E-Mail: <a href="mailto:info@h-da.de">info@h-da.de</a><br>
+              Umsatzsteuer-Identifikationsnummer: DE811763762
+            </p>
+            <h2>Verantwortlich für den Inhalt (gemäß § 18 Abs. 2 Medienstaatsvertrag – MStV)</h2>
+            <p>
+              <a href="https://design.h-da.de/fachbereich/menschen" target="_blank" rel="noopener noreferrer">Prof. Tobias Katz, Prof. Dr. Gesa Foken und Dr. Christian Driesen</a><br>
+              Hochschule Darmstadt — Fachbereich Gestaltung<br>
+              Olbrichweg 10, 64287 Darmstadt
+            </p>
+            <h2>Urheberrecht</h2>
+            <p>
+              Alle auf dieser Website veröffentlichten Inhalte — Texte, Bilder, Grafiken und Gestaltung — sind urheberrechtlich geschützt. Jede Nutzung außerhalb der engen Grenzen des Urheberrechts bedarf der Zustimmung der jeweiligen Rechteinhaber. Dies gilt insbesondere für Vervielfältigung, Bearbeitung, Verbreitung und Verwertung.
+            </p>
+            <h2>Bildrechte</h2>
+            <p>
+              Die verwendeten Fotografien und Abbildungen sind urheberrechtlich geschützt. Die Rechte liegen bei den jeweiligen Urheber:innen bzw. Rechteinhaber:innen. Eine Weiterverwendung ist nur mit deren ausdrücklicher Genehmigung gestattet.
+            </p>
+            <h2>Haftungsausschluss</h2>
+            <p>
+              Diese Website dient der Dokumentation der Ausstellung. Auf die Inhalte externer verlinkter Seiten haben wir keinen Einfluss. Für deren Inhalte sind ausschließlich die jeweiligen Betreiber verantwortlich.
+            </p>
+            <h2 id="legal-privacy-title">Datenschutz</h2>
+            <p>
+              Verantwortliche Stelle für die Verarbeitung personenbezogener Daten ist die Hochschule Darmstadt. Die Hochschule stellt ihre <a href="https://h-da.de/hochschule/wofuer-wir-stehen/qualitaetsmanagement-studium-und-lehre/evaluation-und-befragungen/informationspflichten-und-datenschutz" target="_blank" rel="noopener noreferrer">Datenschutzhinweise und Informationen zu Betroffenenrechten</a> bereit. Den Datenschutzbeauftragten erreichst du unter <a href="mailto:datenschutz@h-da.de">datenschutz@h-da.de</a>.
+            </p>
+            <p>
+              Die Website wird über GitHub Pages bereitgestellt. Laut <a href="https://docs.github.com/privacy-policy" target="_blank" rel="noopener noreferrer">Datenschutzerklärung von GitHub</a> verarbeitet GitHub bei der Nutzung seiner Dienste unter anderem IP-Adressen, Geräteinformationen sowie Angaben zu Anfragen und zur Websitenutzung.
+            </p>
+            <p>
+              Die Schriftart „Alte Haas Grotesk“ wird beim Seitenaufruf von fonts.cdnfonts.com geladen. Dadurch wird eine Verbindung zu einem externen Anbieter hergestellt; dabei kann insbesondere die IP-Adresse übermittelt werden. Die konkreten Verarbeitungs- und Speicherbedingungen richten sich nach den Angaben des Anbieters.
+            </p>
+            <p>
+              Die Website setzt selbst keine Cookies und verwendet keine Analyse- oder Werbedienste. Für den wechselnden Logo-Zustand wird der Schlüssel „komLogoIndex“ im sessionStorage des Browsers gespeichert; dieser Wert wird nicht an den Server übertragen. Externe Social-Media-Seiten werden erst beim Anklicken ihrer Links aufgerufen.
+            </p>
+          </section>
         </div>
       </div>
     </section>
@@ -2303,6 +2402,7 @@
           <span>Website erstellt von Emir Can Yilmaz</span>
           <span class="ext-arrow" aria-hidden="true">↗</span>
         </a>
+        <button class="social-link-item" type="button" onclick="showPage('impressum')">Impressum &amp; Datenschutz</button>
       </div>
     </div>
 
