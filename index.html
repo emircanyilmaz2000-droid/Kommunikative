@@ -193,6 +193,49 @@
       display: block;
     }
 
+    .hero-logo-contrast {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      filter: brightness(0) invert(1);
+      pointer-events: none;
+      mask-image: linear-gradient(to right, transparent, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, transparent);
+      transition: opacity 650ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hero-logo-icon-restore {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      clip-path: ellipse(4.805% 50% at 11.443% 50%);
+      transition: opacity 650ms cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .hero-logo-icon-cutout {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      clip-path: ellipse(4.805% 50% at 11.443% 50%);
+      filter: url(#hero-logo-pink-icon-filter);
+      pointer-events: none;
+      transition: opacity 650ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hero-logo-clickable .hero-logo-filter-defs {
+      position: absolute;
+      width: 0;
+      height: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
     .top-utilities {
       display: flex;
       align-items: center;
@@ -423,6 +466,7 @@
     .hero-logo-clickable {
       cursor: pointer;
       display: inline-block;
+      position: relative;
       width: clamp(260px, 68vw, 880px);
       transition: opacity 0.2s ease;
     }
@@ -479,6 +523,86 @@
       height: auto;
       aspect-ratio: 768 / 1084;
       object-fit: cover;
+    }
+
+    .home-numbered-gallery {
+      order: 0;
+      padding: 0 var(--page-pad);
+      margin-bottom: var(--section-space);
+    }
+
+    .home-gallery-frame {
+      position: relative;
+      height: min(calc(100svh - var(--header-h) - 16px), 900px);
+      min-height: 340px;
+      overflow: hidden;
+      background: #111;
+    }
+
+    .giant-wordmark-wrap {
+      margin-bottom: clamp(-96px, -6.8vw, -28px);
+    }
+
+    .home-gallery-image {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .home-gallery-image.is-active {
+      opacity: 1;
+    }
+
+    .home-gallery-controls {
+      position: absolute;
+      right: clamp(14px, 2.5vw, 32px);
+      bottom: clamp(14px, 2.5vw, 32px);
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: clamp(6px, 0.8vw, 10px);
+    }
+
+    .home-gallery-button {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      background: #fff;
+      color: #111;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .home-gallery-button:hover {
+      opacity: 0.78;
+      transform: translateY(-2px);
+    }
+
+    .home-gallery-button svg {
+      width: 19px;
+      height: 19px;
+      display: block;
+    }
+
+    .home-gallery-button svg[hidden] {
+      display: none;
+    }
+
+    @media (max-width: 560px) {
+      .home-gallery-button {
+        width: 34px;
+        height: 34px;
+      }
+
+      .home-gallery-button svg {
+        width: 17px;
+        height: 17px;
+      }
     }
 
     /* =========================================================
@@ -1661,6 +1785,11 @@
         width: 92vw;
       }
 
+      .home-gallery-frame {
+        height: min(calc(100svh - var(--header-h) - 12px), 760px);
+        min-height: 320px;
+      }
+
       .initiators-grid {
         grid-template-columns: 1fr;
       }
@@ -1831,13 +1960,42 @@
       <section class="home-hero-section">
         <div class="giant-wordmark-wrap">
           <div class="hero-logo-clickable" onclick="cycleHeroLogo()" title="KOMMUNIKATIVE! (Klicken für Farbwechsel)">
-            <img 
-              id="dynamic-kom-logo" 
-              src="IMG/Logos/Kommunikative Logo 1.svg" 
+            <svg class="hero-logo-filter-defs" aria-hidden="true">
+              <mask id="hero-logo-wordmark-only-mask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox" mask-type="luminance">
+                <rect x="0" y="0" width="1" height="1" fill="#fff"/>
+                <ellipse cx="0.11443" cy="0.5" rx="0.04805" ry="0.5" fill="#000"/>
+              </mask>
+              <filter id="hero-logo-pink-icon-filter" color-interpolation-filters="sRGB">
+                <feColorMatrix id="hero-logo-pink-icon-matrix" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0"/>
+              </filter>
+            </svg>
+            <img
+              id="dynamic-kom-logo"
+              src="IMG/Logos/Kommunikative Logo 1.svg"
               alt="KOMMUNIKATIVE!"
               onerror="this.style.display='none'; document.getElementById('inline-kom-fallback').style.display='block';"
             >
-            <!-- Vektor-Fallback falls lokale SVG-Dateien in anderem Pfad liegen -->
+            <img
+              id="dynamic-kom-logo-contrast"
+              class="hero-logo-contrast"
+              src="IMG/Logos/Kommunikative Logo 1.svg"
+              alt=""
+              aria-hidden="true"
+            >
+            <img
+              id="dynamic-kom-logo-icon-restore"
+              class="hero-logo-icon-restore"
+              src="IMG/Logos/Kommunikative Logo 1.svg"
+              alt=""
+              aria-hidden="true"
+            >
+            <img
+              id="dynamic-kom-logo-icon-cutout"
+              class="hero-logo-icon-cutout"
+              src="IMG/Logos/Kommunikative Logo 1.svg"
+              alt=""
+              aria-hidden="true"
+            >
             <svg id="inline-kom-fallback" style="display:none;" viewBox="0 0 1180 125" xmlns="http://www.w3.org/2000/svg" aria-label="KOMMUNIKATIVE!">
               <text x="0" y="108" font-family="'Alte Haas Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="700" font-size="122" fill="#111111">K</text>
               <g transform="translate(80, 4)">
@@ -1856,7 +2014,6 @@
             </svg>
           </div>
         </div>
-
         <section class="poster-variants-section" aria-labelledby="poster-variants-title">
           <div class="poster-variants-heading">
             <h2 id="poster-variants-title">Die Ausstellung in vier Plakatvarianten</h2>
@@ -1895,6 +2052,46 @@
           <a class="home-arrow-link" onclick="showPage('ausstellung')">13 Arbeiten entdecken</a>
           <a class="home-arrow-link" onclick="showPage('programm')">Programm &amp; Besuch</a>
           <a class="home-arrow-link" onclick="scrollToEditorial()">Kuratorisches Konzept</a>
+        </div>
+      </section>
+
+      <section class="home-numbered-gallery" aria-label="Bildergalerie der Ausstellung">
+        <div class="home-gallery-frame">
+          <img
+            id="home-gallery-image"
+            class="home-gallery-image is-active"
+            src="IMG/Programm:Bilder/1.jpg"
+            alt="Sprecher bei einer Veranstaltung im Ausstellungsraum"
+            decoding="async"
+          >
+          <img
+            id="home-gallery-image-next"
+            class="home-gallery-image"
+            src="IMG/Programm:Bilder/1.jpg"
+            alt=""
+            aria-hidden="true"
+            decoding="async"
+          >
+          <div class="home-gallery-controls">
+            <button class="home-gallery-button" type="button" aria-label="Vorheriges Bild" onclick="changeHomeGalleryPhoto(-1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6"/>
+              </svg>
+            </button>
+            <button class="home-gallery-button" type="button" aria-label="Nächstes Bild" onclick="changeHomeGalleryPhoto(1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </button>
+            <button id="home-gallery-playback" class="home-gallery-button" type="button" aria-label="Diashow starten" aria-pressed="false" onclick="toggleHomeGalleryPlayback()">
+              <svg id="home-gallery-play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M7 4v16l13-8z"/>
+              </svg>
+              <svg id="home-gallery-pause-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden>
+                <path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+              </svg>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -2561,7 +2758,19 @@
       sessionStorage.setItem('komLogoIndex', nextIdx);
 
       const chosen = kommunikativeLogos[nextIdx];
+      const logoColorChannels = chosen.hex.match(/[0-9a-f]{2}/gi).map((channel) => parseInt(channel, 16) / 255);
+      const colorChannelSum = logoColorChannels.reduce((total, channel) => total + channel, 0);
+      const pinkIconScale = 1 / (colorChannelSum - 0.3);
+      const pinkIconMatrix = [
+        1, 0, 0, 0, 0,
+        0, 1, 0, 0, 0,
+        0, 0, 1, 0, 0,
+        pinkIconScale, pinkIconScale, pinkIconScale, 0, -0.3 * pinkIconScale
+      ];
+      document.getElementById('hero-logo-pink-icon-matrix').setAttribute('values', pinkIconMatrix.join(' '));
       const logoImg = document.getElementById('dynamic-kom-logo');
+      const contrastLogoImg = document.getElementById('dynamic-kom-logo-contrast');
+      const iconRestoreImg = document.getElementById('dynamic-kom-logo-icon-restore');
       const smallLogoImg = document.getElementById('header-small-logo');
       const fallbackCircle = document.getElementById('fallback-o-circle');
       const fallbackSvg = document.getElementById('inline-kom-fallback');
@@ -2569,6 +2778,12 @@
       if (logoImg) {
         logoImg.src = chosen.file;
         logoImg.style.display = 'block';
+      }
+      if (contrastLogoImg) {
+        contrastLogoImg.src = chosen.file;
+      }
+      if (iconRestoreImg) {
+        iconRestoreImg.src = chosen.file;
       }
       if (smallLogoImg) {
         smallLogoImg.src = chosen.smallFile;
@@ -2585,6 +2800,207 @@
     function handleHeaderLogoClick() {
       cycleHeroLogo();
       showPage('home', true);
+    }
+
+    const homeGalleryPhotos = [
+      { src: "IMG/Programm:Bilder/1.jpg", alt: "Sprecher bei einer Veranstaltung im Ausstellungsraum" },
+      { src: "IMG/Programm:Bilder/2.jpg", alt: "Vortrag im Ausstellungsraum aus dem Publikum fotografiert" },
+      { src: "IMG/Programm:Bilder/3.jpg", alt: "Teilnehmende bei einer Veranstaltung" },
+      { src: "IMG/Programm:Bilder/4.jpg", alt: "Sprecher vor einer Präsentation" },
+      { src: "IMG/Programm:Bilder/5.jpg", alt: "Vortrag bei einer Veranstaltung" }
+    ];
+    let activeHomeGalleryPhoto = 0;
+    let activeHomeGalleryLayer = 0;
+    let homeGalleryPlaybackTimer = null;
+    let homeGalleryLogoContrastFrame = null;
+    let homeGalleryTransitioning = false;
+    const homeGalleryImages = [
+      document.getElementById('home-gallery-image'),
+      document.getElementById('home-gallery-image-next')
+    ];
+
+    function updateHomeGalleryLogoContrast(galleryImage = homeGalleryImages[activeHomeGalleryLayer]) {
+      const logoImage = document.getElementById('dynamic-kom-logo');
+      const contrastLogoImage = document.getElementById('dynamic-kom-logo-contrast');
+      const iconRestoreImage = document.getElementById('dynamic-kom-logo-icon-restore');
+      const iconCutoutImage = document.getElementById('dynamic-kom-logo-icon-cutout');
+      if (!galleryImage.complete || !galleryImage.naturalWidth || !logoImage.complete) return;
+
+      const imageRect = galleryImage.getBoundingClientRect();
+      const logoRect = logoImage.getBoundingClientRect();
+      const overlapTop = Math.max(imageRect.top, logoRect.top);
+      const overlapBottom = Math.min(imageRect.bottom, logoRect.bottom);
+      if (overlapBottom <= overlapTop) {
+        const transparentMask = 'linear-gradient(to right, transparent, transparent)';
+        logoImage.style.maskImage = 'none';
+        logoImage.style.webkitMaskImage = 'none';
+        contrastLogoImage.style.maskImage = transparentMask;
+        contrastLogoImage.style.webkitMaskImage = transparentMask;
+        logoImage.style.opacity = '1';
+        contrastLogoImage.style.opacity = '0';
+        iconRestoreImage.style.opacity = '1';
+        iconCutoutImage.style.opacity = '0';
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 240;
+      canvas.height = Math.max(1, Math.round(canvas.width * imageRect.height / imageRect.width));
+      const context = canvas.getContext('2d', { willReadFrequently: true });
+      const scale = Math.max(
+        imageRect.width / galleryImage.naturalWidth,
+        imageRect.height / galleryImage.naturalHeight
+      );
+      const sourceWidth = imageRect.width / scale;
+      const sourceHeight = imageRect.height / scale;
+      context.drawImage(
+        galleryImage,
+        (galleryImage.naturalWidth - sourceWidth) / 2,
+        (galleryImage.naturalHeight - sourceHeight) / 2,
+        sourceWidth,
+        sourceHeight,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+      const iconStart = 73 / 1107.63;
+      const iconEnd = 180 / 1107.63;
+      const sampleTop = Math.max(0, Math.floor((overlapTop - imageRect.top) / imageRect.height * canvas.height));
+      const sampleBottom = Math.min(canvas.height, Math.ceil((overlapBottom - imageRect.top) / imageRect.height * canvas.height));
+      let blackContrast = 0;
+      let whiteContrast = 0;
+      let samples = 0;
+
+      for (let x = 0; x < canvas.width; x += 1) {
+        const screenX = imageRect.left + (x + 0.5) / canvas.width * imageRect.width;
+        const logoPosition = (screenX - logoRect.left) / logoRect.width;
+        if (logoPosition < 0 || logoPosition > 1 || (logoPosition >= iconStart && logoPosition <= iconEnd)) {
+          continue;
+        }
+
+        for (let y = sampleTop; y < sampleBottom; y += 1) {
+          const pixelIndex = (y * canvas.width + x) * 4;
+          const channels = [pixels[pixelIndex], pixels[pixelIndex + 1], pixels[pixelIndex + 2]].map((value) => {
+            const channel = value / 255;
+            return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+          });
+          const luminance = channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+          blackContrast += (luminance + 0.05) / 0.05;
+          whiteContrast += 1.05 / (luminance + 0.05);
+          samples += 1;
+        }
+      }
+
+      const useWhiteText = samples > 0 && whiteContrast > blackContrast;
+      const wordmarkMask = 'url(#hero-logo-wordmark-only-mask)';
+      const transparentMask = 'linear-gradient(to right, transparent, transparent)';
+      logoImage.style.maskImage = useWhiteText ? wordmarkMask : 'none';
+      logoImage.style.webkitMaskImage = useWhiteText ? wordmarkMask : 'none';
+      contrastLogoImage.style.maskImage = useWhiteText ? wordmarkMask : transparentMask;
+      contrastLogoImage.style.webkitMaskImage = useWhiteText ? wordmarkMask : transparentMask;
+      logoImage.style.opacity = useWhiteText ? '0' : '1';
+      contrastLogoImage.style.opacity = useWhiteText ? '1' : '0';
+      iconRestoreImage.style.opacity = useWhiteText ? '0' : '1';
+      iconCutoutImage.style.opacity = useWhiteText ? '1' : '0';
+    }
+
+    function scheduleHomeGalleryLogoContrast() {
+      if (homeGalleryLogoContrastFrame !== null) return;
+      homeGalleryLogoContrastFrame = window.requestAnimationFrame(() => {
+        homeGalleryLogoContrastFrame = null;
+        updateHomeGalleryLogoContrast();
+      });
+    }
+
+    homeGalleryImages.forEach((image, index) => {
+      image.addEventListener('load', () => {
+        if (index === activeHomeGalleryLayer) scheduleHomeGalleryLogoContrast();
+      });
+    });
+    window.addEventListener('resize', scheduleHomeGalleryLogoContrast, { passive: true });
+    window.addEventListener('scroll', scheduleHomeGalleryLogoContrast, { passive: true });
+    scheduleHomeGalleryLogoContrast();
+
+    function showHomeGalleryPhoto(index) {
+      const nextPhotoIndex = (index + homeGalleryPhotos.length) % homeGalleryPhotos.length;
+      if (homeGalleryTransitioning || nextPhotoIndex === activeHomeGalleryPhoto) return;
+
+      const photo = homeGalleryPhotos[nextPhotoIndex];
+      const outgoingImage = homeGalleryImages[activeHomeGalleryLayer];
+      const nextLayer = 1 - activeHomeGalleryLayer;
+      const incomingImage = homeGalleryImages[nextLayer];
+      homeGalleryTransitioning = true;
+
+      const onError = () => {
+        homeGalleryTransitioning = false;
+        console.error(`Die Galerieaufnahme konnte nicht geladen werden: ${photo.src}`);
+      };
+      const onLoad = () => {
+        if (!incomingImage.naturalWidth) return;
+        incomingImage.removeEventListener('error', onError);
+        incomingImage.alt = photo.alt;
+        incomingImage.setAttribute('aria-hidden', 'false');
+        outgoingImage.alt = '';
+        outgoingImage.setAttribute('aria-hidden', 'true');
+        activeHomeGalleryPhoto = nextPhotoIndex;
+        activeHomeGalleryLayer = nextLayer;
+        updateHomeGalleryLogoContrast(incomingImage);
+
+        let finished = false;
+        let fallbackTimer;
+        const finishTransition = () => {
+          if (finished) return;
+          finished = true;
+          window.clearTimeout(fallbackTimer);
+          incomingImage.removeEventListener('transitionend', onTransitionEnd);
+          homeGalleryTransitioning = false;
+        };
+        const onTransitionEnd = (event) => {
+          if (event.target === incomingImage && event.propertyName === 'opacity') finishTransition();
+        };
+
+        incomingImage.addEventListener('transitionend', onTransitionEnd);
+        window.requestAnimationFrame(() => {
+          incomingImage.classList.add('is-active');
+          outgoingImage.classList.remove('is-active');
+        });
+        fallbackTimer = window.setTimeout(finishTransition, 800);
+      };
+
+      incomingImage.addEventListener('load', onLoad, { once: true });
+      incomingImage.addEventListener('error', onError, { once: true });
+      incomingImage.src = photo.src;
+      if (incomingImage.complete && incomingImage.naturalWidth) {
+        incomingImage.removeEventListener('load', onLoad);
+        onLoad();
+      }
+    }
+
+    function changeHomeGalleryPhoto(direction) {
+      showHomeGalleryPhoto(activeHomeGalleryPhoto + direction);
+    }
+
+    function toggleHomeGalleryPlayback() {
+      const playbackButton = document.getElementById('home-gallery-playback');
+      const playIcon = document.getElementById('home-gallery-play-icon');
+      const pauseIcon = document.getElementById('home-gallery-pause-icon');
+      const isPlaying = homeGalleryPlaybackTimer !== null;
+
+      if (isPlaying) {
+        window.clearInterval(homeGalleryPlaybackTimer);
+        homeGalleryPlaybackTimer = null;
+      } else {
+        homeGalleryPlaybackTimer = window.setInterval(() => {
+          changeHomeGalleryPhoto(1);
+        }, 5000);
+      }
+
+      playbackButton.setAttribute('aria-pressed', String(!isPlaying));
+      playbackButton.setAttribute('aria-label', isPlaying ? 'Diashow starten' : 'Diashow pausieren');
+      playIcon.toggleAttribute('hidden', !isPlaying);
+      pauseIcon.toggleAttribute('hidden', isPlaying);
     }
 
     // =========================================================
