@@ -1967,21 +1967,13 @@
               alt=""
               aria-hidden="true"
             >
-            <svg
+            <img
               id="dynamic-kom-logo-icon-cutout"
               class="hero-logo-icon-cutout"
-              viewBox="0 0 1107.63 106.45"
-              preserveAspectRatio="none"
+              src="IMG/Logos/Kommunikative Logo 1 Cutout.svg"
+              alt=""
               aria-hidden="true"
             >
-              <image
-                id="dynamic-kom-logo-icon-cutout-source"
-                href="IMG/Logos/Kommunikative Logo 1 Cutout.svg"
-                width="1107.63"
-                height="106.45"
-                preserveAspectRatio="none"
-              />
-            </svg>
             <svg id="inline-kom-fallback" style="display:none;" viewBox="0 0 1180 125" xmlns="http://www.w3.org/2000/svg" aria-label="KOMMUNIKATIVE!">
               <text x="0" y="108" font-family="'Alte Haas Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="700" font-size="122" fill="#111111">K</text>
               <g transform="translate(80, 4)">
@@ -2745,7 +2737,7 @@
       const logoImg = document.getElementById('dynamic-kom-logo');
       const contrastLogoImg = document.getElementById('dynamic-kom-logo-contrast');
       const iconRestoreImg = document.getElementById('dynamic-kom-logo-icon-restore');
-      const iconCutoutSource = document.getElementById('dynamic-kom-logo-icon-cutout-source');
+      const iconCutoutImg = document.getElementById('dynamic-kom-logo-icon-cutout');
       const smallLogoImg = document.getElementById('header-small-logo');
       const fallbackCircle = document.getElementById('fallback-o-circle');
       const fallbackSvg = document.getElementById('inline-kom-fallback');
@@ -2760,8 +2752,8 @@
       if (iconRestoreImg) {
         iconRestoreImg.src = chosen.file;
       }
-      if (iconCutoutSource) {
-        iconCutoutSource.setAttribute('href', chosen.iconFile);
+      if (iconCutoutImg) {
+        iconCutoutImg.src = chosen.iconFile;
       }
       if (smallLogoImg) {
         smallLogoImg.src = chosen.smallFile;
