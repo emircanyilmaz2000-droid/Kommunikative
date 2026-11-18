@@ -545,6 +545,11 @@
       transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    .home-gallery-image[src$="/5.jpg"] {
+      transform: translate(4%, 5%) scale(1.08);
+      transform-origin: center top;
+    }
+
     .home-gallery-image.is-active {
       opacity: 1;
     }
@@ -2777,7 +2782,9 @@
       { src: "IMG/Programm:Bilder/2.jpg", alt: "Vortrag im Ausstellungsraum aus dem Publikum fotografiert" },
       { src: "IMG/Programm:Bilder/3.jpg", alt: "Teilnehmende bei einer Veranstaltung" },
       { src: "IMG/Programm:Bilder/4.jpg", alt: "Sprecher vor einer Präsentation" },
-      { src: "IMG/Programm:Bilder/5.jpg", alt: "Vortrag bei einer Veranstaltung" }
+      { src: "IMG/Programm:Bilder/5.jpg", alt: "Vortrag bei einer Veranstaltung" },
+      { src: "IMG/Programm:Bilder/6.jpg", alt: "Vortragende bei einer Präsentation" },
+      { src: "IMG/Programm:Bilder/7.jpg", alt: "Vortragende vor einer Präsentation" }
     ];
     let activeHomeGalleryPhoto = 0;
     let activeHomeGalleryLayer = 0;
